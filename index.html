@@ -7,6 +7,7 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Kuchárka">
 <link rel="manifest" href="manifest.webmanifest">
+<script src="config.js"></script>
 <link rel="icon" type="image/png" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <script>
@@ -296,7 +297,7 @@ img{max-width:100%}
 .gate h1{font-size:34px;font-weight:700;letter-spacing:-.025em}
 .gate p{color:var(--label2);margin:0}
 .gate code{font-size:14px;background:var(--fill);padding:1px 6px;border-radius:6px}
-.gate-logo{width:88px;height:88px;border-radius:22px;background:linear-gradient(145deg,#FFB340,#FF6B3D);display:grid;place-items:center;color:#fff;box-shadow:0 12px 30px rgba(255,120,60,.35)}
+.gate-logo{width:96px;height:96px;border-radius:22px;box-shadow:0 12px 30px rgba(0,0,0,.3)}
 .gate-logo svg{width:50px;height:50px}
 .gate-btn{height:50px;padding:0 22px;font-size:17px;margin-top:8px}
 .gate-btn svg{width:20px;height:20px}
@@ -310,15 +311,15 @@ img{max-width:100%}
 <div id="sheet"></div>
 
 <script>
-/* ===================== NASTAVENIA =====================
+/* ===================== NASTAVENIA (vyplň v súbore config.js) =====================
    CLIENT_ID: identifikátor aplikácie z Google Cloud Console
    (Google Auth Platform → Clients → Web application).
    FOLDER_NAME: priečinok na Google Drive, kde budú recepty a fotky. */
-const CONFIG = {
+const CONFIG = Object.assign({
   CLIENT_ID: '890236973674-23d5m44shiqt2degt1ibr02bgie0spv9.apps.googleusercontent.com',
   FOLDER_NAME: 'Fit Kuchárka',
   FILE_NAME: 'kucharka.json',
-};
+}, window.KUCHARKA_CONFIG || {});   /* hodnoty z config.js majú prednosť */
 /* ====================================================== */
 const I = {
   all:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><rect x="4" y="4" width="7" height="7" rx="2"/><rect x="13" y="4" width="7" height="7" rx="2"/><rect x="4" y="13" width="7" height="7" rx="2"/><rect x="13" y="13" width="7" height="7" rx="2"/></svg>',
@@ -449,7 +450,7 @@ const LS = {
 };
 const configured = () => CONFIG.CLIENT_ID && !CONFIG.CLIENT_ID.startsWith('SEM_');
 const tokenOk = () => !!S.token && S.token.exp > Date.now() + 30000;
-function signIn(silent){
+function signIn(silent, consent){
   if(!configured()) return;
   if(S.draft) stashDraft(true);
   cacheSave();
@@ -459,6 +460,7 @@ function signIn(silent){
   const p = new URLSearchParams({ client_id:CONFIG.CLIENT_ID, redirect_uri:REDIRECT, response_type:'token', scope:SCOPE, include_granted_scopes:'true', state });
   const hint = LS.get('email'); if(hint) p.set('login_hint', hint);
   if(silent) p.set('prompt','none');
+  else if(consent) p.set('prompt','consent');
   location.assign('https://accounts.google.com/o/oauth2/v2/auth?' + p.toString());
 }
 function handleRedirect(){
@@ -575,11 +577,12 @@ function syncLine(){
     saving: ['', 'Ukladám na Google Drive…'],
     offline: ['warn', 'Si offline. Zmeny sú uložené v zariadení a nahrajú sa, keď budeš online.'],
     auth: ['warn', 'Prihlásenie vypršalo. Zmeny sú uložené v zariadení.'],
-    error: ['warn', 'Nepodarilo sa uložiť na Google Drive' + (S.syncMsg ? ': ' + S.syncMsg : '.')],
+    error: ['warn', 'Google Drive: ' + (S.syncMsg || 'nepodarilo sa uložiť.')],
+    scope: ['warn', 'Pri prihlásení nebol povolený prístup ku Google Drive. Prihlás sa znova a na obrazovke Googlu zaškrtni prístup k Disku.'],
   };
   const m = map[S.sync];
   if(!m) return '<div id="syncline" hidden></div>';
-  const btn = S.sync==='auth' ? '<button class="linkbtn" data-act="signin">Prihlásiť znova</button>' : S.sync==='error' ? '<button class="linkbtn" data-act="sync">Skúsiť znova</button>' : '';
+  const btn = S.sync==='scope' ? '<button class="linkbtn" data-act="consent">Prihlásiť a povoliť</button>' : S.sync==='auth' ? '<button class="linkbtn" data-act="signin">Prihlásiť znova</button>' : S.sync==='error' ? '<button class="linkbtn" data-act="sync">Skúsiť znova</button>' : '';
   return `<div id="syncline" class="syncline ${m[0]}">${S.sync==='saving'?'<span class="spin"></span>':''}<span>${esc(m[1])}</span>${btn}</div>`;
 }
 function handleErr(e){
@@ -590,7 +593,13 @@ function handleErr(e){
   }
   if(e && e.code==='offline'){ setSync('offline'); return; }
   if(e && e.status===404 && S.store){ S.store = null; cacheSave(); connect(); return; }
-  if(e && e.status===403){ setSync('error', 'nemáš oprávnenie upravovať priečinok (požiadaj o prístup „Editor“)'); return; }
+  if(e && e.status===403){
+    const m = (e.message||'').toLowerCase();
+    if(m.includes('has not been used') || m.includes('disabled') || m.includes('accessnotconfigured')){ setSync('error', 'v Google Cloud projekte nie je zapnuté Google Drive API'); return; }
+    if(m.includes('insufficient') || m.includes('scope') || m.includes('permission_denied') && !S.store){ setSync('scope'); return; }
+    setSync('error', S.store?.shared ? 'nemáš oprávnenie upravovať zdieľaný priečinok (požiadaj o prístup „Editor“)' : (e.message || 'Google zamietol prístup'));
+    return;
+  }
   setSync('error', e && e.message ? e.message : '');
 }
 async function connect(){
@@ -809,7 +818,7 @@ function sortPill(){
     <select id="sort" aria-label="Zoradiť">${Object.entries(SORTS).map(([k,v])=>`<option value="${k}" ${S.sort===k?'selected':''}>${v.name}</option>`).join('')}</select></span>`;
 }
 function viewGate(){
-  const logo = `<div class="gate-logo">${I.obed}</div>`;
+  const logo = `<img class="gate-logo" src="icon-512.png" alt="">`;
   if(S.screen==='setup') return `<div class="gate">${logo}<h1>Fit Kuchárka</h1><p>Aplikácia ešte nie je nastavená. V súbore <b>index.html</b> doplň do <code>CONFIG.CLIENT_ID</code> identifikátor z Google Cloud Console.</p></div>`;
   if(S.screen==='nofolder') return `<div class="gate">${logo}<h1>Kuchárka sa nenašla</h1>
     <p>Na Google Drive účtu <b>${esc(S.me||'')}</b> nie je priečinok <b>${esc(CONFIG.FOLDER_NAME)}</b>${S.found?' so súborom receptov':''}.</p>
@@ -1188,6 +1197,7 @@ document.addEventListener('click', async e=>{
   switch(t.dataset.act){
     case 'new': openSheet(blank()); break;
     case 'signin': signIn(false); break;
+    case 'consent': signIn(false, true); break;
     case 'signout': signOut(); break;
     case 'sync': if(tokenOk()) { S.dirty ? push() : refresh(); } else signIn(false); break;
     case 'retry': S.screen='app'; S.found=null; connect(); break;
