@@ -285,6 +285,24 @@ textarea.in{resize:none;line-height:1.4;overflow:hidden;display:block}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 
+/* Open Food Facts */
+.offrow{gap:8px;flex-wrap:wrap;padding-block:10px}
+.offbtn{display:inline-flex;align-items:center;gap:6px;height:34px;padding:0 12px;border-radius:999px;background:var(--fill);color:var(--tint);font-size:14px;font-weight:600}
+.offbtn svg{width:16px;height:16px}
+.offname{display:block;font-size:12px;color:var(--tint);margin-top:2px}
+.offsearch{display:flex;gap:8px;align-items:center;margin-bottom:16px}
+.offsearch .gbtn{flex:none;padding:0 16px}
+.offres{align-items:flex-start;gap:14px;padding-block:12px}
+.offres img,.offres .offph{width:54px;height:54px;border-radius:12px;object-fit:cover;background:#fff;flex:none}
+.offres .offph{display:grid;place-items:center;background:var(--fill);color:var(--label3)}
+.offres .offph svg{width:28px;height:28px}
+.offres .t{font-weight:600;display:block}
+.offres .sub{display:block;font-size:13px}
+.scanbox{position:relative;border-radius:var(--rl);overflow:hidden;background:#000;aspect-ratio:4/3}
+.scanbox video{width:100%;height:100%;object-fit:cover;display:block}
+.scanframe{position:absolute;left:12%;right:12%;top:32%;bottom:32%;border:3px solid rgba(255,255,255,.9);border-radius:16px;box-shadow:0 0 0 999px rgba(0,0,0,.35)}
+@media (min-width:701px){ .offsheet{top:8vh;bottom:8vh;width:min(560px,calc(100% - 32px))} }
+
 /* samostatná aplikácia */
 html{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 body{min-height:100vh}
@@ -344,6 +362,7 @@ const I = {
   auto:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="8.5"/><path d="M12 3.5a8.5 8.5 0 0 1 0 17z" fill="currentColor"/></svg>',
   cloud:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M7 18h10.5a4 4 0 0 0 .4-8 6 6 0 0 0-11.6 1.5A3.3 3.3 0 0 0 7 18z"/></svg>',
   google:'<svg viewBox="0 0 24 24"><path fill="#fff" d="M21.6 12.2c0-.7-.1-1.4-.2-2H12v3.8h5.4a4.6 4.6 0 0 1-2 3v2.5h3.2c1.9-1.7 3-4.3 3-7.3z"/><path fill="#fff" opacity=".85" d="M12 22c2.7 0 5-.9 6.6-2.4l-3.2-2.5c-.9.6-2 1-3.4 1-2.6 0-4.8-1.8-5.6-4.1H3.1v2.6A10 10 0 0 0 12 22z"/><path fill="#fff" opacity=".7" d="M6.4 14a6 6 0 0 1 0-3.9V7.5H3.1a10 10 0 0 0 0 9z"/><path fill="#fff" opacity=".85" d="M12 6c1.5 0 2.8.5 3.8 1.5l2.9-2.9A10 10 0 0 0 3.1 7.5l3.3 2.6C7.2 7.8 9.4 6 12 6z"/></svg>',
+  barcode:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2M7 8v8M10.5 8v8M14 8v8M17 8v8"/></svg>',
   camera:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>',
 };
 const CATS = [
@@ -365,7 +384,7 @@ const UNITS = ['g','ml','ks'];
 const MEASURES = ['', 'PL (polievková lyžica)','ČL (čajová lyžička)','odmerka','hrnček','šálka','hrsť','štipka','plátok','kus','strúčik','balenie','konzerva'];
 const DIFF = ['Ľahké','Stredné','Náročné'];
 
-const S = { screen:'app', store:null, purged:{}, img:{}, sync:'', syncMsg:'', me:'', dirty:false, loaded:false, found:null, authErr:'', importMsg:'', token:null, recipes:[], view:'home', id:null, cat:'all', q:'', servings:null, checked:new Set(), draft:null, db:null, assets:null, status:'Načítavam recepty…', err:'', tpage:'', all:[], trash:[], uid:null, user:null, names:{}, dl:null, conflict:null, openNut:new Set(), pending:new Set(), ai:null, aiErr:'', type:'', sort:(()=>{ try{ return localStorage.getItem('kucharka-sort')||'new'; }catch(e){ return 'new'; } })() };
+const S = { off:null, scanStream:null, scanTimer:null, scanReader:null, screen:'app', store:null, purged:{}, img:{}, sync:'', syncMsg:'', me:'', dirty:false, loaded:false, found:null, authErr:'', importMsg:'', token:null, recipes:[], view:'home', id:null, cat:'all', q:'', servings:null, checked:new Set(), draft:null, db:null, assets:null, status:'Načítavam recepty…', err:'', tpage:'', all:[], trash:[], uid:null, user:null, names:{}, dl:null, conflict:null, openNut:new Set(), pending:new Set(), ai:null, aiErr:'', type:'', sort:(()=>{ try{ return localStorage.getItem('kucharka-sort')||'new'; }catch(e){ return 'new'; } })() };
 const SORTS = {
   new:     {name:'Najnovšie',            fn:(a,b)=>String(b.createdAt||'').localeCompare(String(a.createdAt||''))},
   old:     {name:'Najstaršie',           fn:(a,b)=>String(a.createdAt||'').localeCompare(String(b.createdAt||''))},
@@ -755,7 +774,7 @@ function viewHome(){
       <button class="cell" data-act="backup"><span class="grow">Stiahnuť zálohu receptov</span><span class="sub">JSON</span></button>
       <label class="cell" for="f-import" style="cursor:pointer"><span class="grow">Nahrať recepty zo zálohy</span><span class="sub">JSON</span></label>
       <button class="cell" data-act="signout"><span class="grow">Odhlásiť sa${S.me?` <span class="sub">(${esc(S.me)})</span>`:''}</span></button>
-    </div>${S.importMsg?`<p class="gfoot" style="color:var(--label)">${esc(S.importMsg)}</p>`:''}<p class="gfoot">Recepty sa po každej zmene uložia do súboru ${esc(CONFIG.FILE_NAME)} na Google Drive. Vymazané recepty sa najprv presunú do koša.</p>
+    </div>${S.importMsg?`<p class="gfoot" style="color:var(--label)">${esc(S.importMsg)}</p>`:''}<p class="gfoot">Recepty sa po každej zmene uložia do súboru ${esc(CONFIG.FILE_NAME)} na Google Drive. Vymazané recepty sa najprv presunú do koša. Údaje o výrobkoch: Open Food Facts (ODbL).</p>
     <input id="f-import" type="file" accept="application/json,.json" hidden></div>`;
   if(!S.recipes.length){
     return out + `<div class="empty"><h3>${S.status?'Načítavam…':'Zatiaľ žiadne recepty'}</h3><p>Ťukni na <b>+</b> vpravo hore a pridaj prvý recept, alebo nahraj recepty zo zálohy nižšie.</p></div>` + (S.status?'':foot());
@@ -1007,7 +1026,7 @@ function updateAutoNote(){
   }
   el.textContent = txt;
 }
-const srcLabel = i => ({db:' · z tabuľky', ai:' · odhad Claude', manual:' · ručne'}[i.src] || '');
+const srcLabel = i => ({db:' · z tabuľky', ai:' · odhad Claude', manual:' · ručne', off:' · Open Food Facts'}[i.src] || '');
 function nutCell(i, ix){
   if(S.pending.has(i)) return `<div class="cell nutline" id="nut-${ix}"><span class="spin"></span><span class="grow sub">Zisťujem výživové hodnoty…</span></div>`;
   if(S.openNut.has(i)){
@@ -1021,13 +1040,13 @@ function nutCell(i, ix){
   }
   if(!hasNut(i)) return `<button type="button" class="cell nutline addc" id="nut-${ix}" data-nut="${ix}"><span class="grow">Doplniť výživové hodnoty</span>${I.chev}</button>`;
   const c=contrib(i), needPiece = i.unit==='ks' && !n(i.pieceG);
-  return `<button type="button" class="cell nutline" id="nut-${ix}" data-nut="${ix}"><span class="grow sub num">100 g: ${Math.round(n(i.nut.kcal))} kcal · B ${fmtN(i.nut.p)} · S ${fmtN(i.nut.c)} · T ${fmtN(i.nut.f)}</span><span class="contrib num">${needPiece?'zadaj váhu 1 ks':(grams(i)?Math.round(c.kcal)+' kcal':'')}</span>${I.chev}</button>`;
+  return `<button type="button" class="cell nutline" id="nut-${ix}" data-nut="${ix}"><span class="grow sub num">100 g: ${Math.round(n(i.nut.kcal))} kcal · B ${fmtN(i.nut.p)} · S ${fmtN(i.nut.c)} · T ${fmtN(i.nut.f)}${i.src==='off'&&i.offName?`<span class="offname">Open Food Facts · ${esc(i.offName)}</span>`:''}</span><span class="contrib num">${needPiece?'zadaj váhu 1 ks':(grams(i)?Math.round(c.kcal)+' kcal':'')}</span>${I.chev}</button>`;
 }
 function refreshNut(ix){ const d=S.draft, el=$('#nut-'+ix); if(d && el && d.ingredients[ix]) el.outerHTML = nutCell(d.ingredients[ix], ix); }
 function refreshAllNut(){ S.draft?.ingredients.forEach((_,ix)=>refreshNut(ix)); }
 function autoLookup(ix){
   const d=S.draft, i=d.ingredients[ix]; if(!i || !String(i.name).trim()) return;
-  if(i.src==='manual' && hasNut(i)) return;
+  if((i.src==='manual' || i.src==='off') && hasNut(i)) return;
   if(i.lookedName===i.name && hasNut(i)) return;
   const h=lookupLocal(i.name);
   if(h){ applyHit(i,h); refreshNut(ix); recalc(); return; }
@@ -1063,6 +1082,149 @@ ${items.map((i,k)=>`${k}: ${String(i.name).trim()} (jednotka v recepte: ${i.unit
   refreshAllNut(); recalc();
 }
 
+/* ---------- Open Food Facts: vyhľadanie výrobku a skenovanie čiarového kódu ---------- */
+const OFF = 'https://world.openfoodfacts.org';
+const OFF_FIELDS = 'code,product_name,product_name_sk,product_name_cs,product_name_en,generic_name,brands,quantity,serving_quantity,nutriments,image_front_small_url';
+function offName(p){ return (p.product_name_sk || p.product_name_cs || p.product_name || p.product_name_en || p.generic_name || '').trim(); }
+function offNut(p){
+  const m = p.nutriments || {}, g = k => { const v = m[k]; return v===undefined || v==='' ? null : Number(v); };
+  let kcal = g('energy-kcal_100g'); if(kcal===null && g('energy_100g')!==null) kcal = g('energy_100g') / 4.184;
+  const nut = {kcal, p:g('proteins_100g'), c:g('carbohydrates_100g'), f:g('fat_100g'), fib:g('fiber_100g')};
+  if([nut.kcal, nut.p, nut.c, nut.f].every(v=>v===null)) return null;
+  for(const k in nut) nut[k] = nut[k]===null ? '' : r1(nut[k]);
+  return nut;
+}
+function offItem(p){ return {code:p.code||'', name:offName(p), brand:(p.brands||'').split(',')[0].trim(), qty:p.quantity||'', serving:Number(p.serving_quantity)||0, img:p.image_front_small_url||'', nut:offNut(p)}; }
+async function offFetch(url){
+  let res;
+  try{ res = await fetch(url); }catch(e){ throw {code:'offline'}; }
+  if(res.status===429 || res.status===503) throw {code:'busy'};
+  if(!res.ok) throw {code:'http', status:res.status};
+  return res.json();
+}
+async function offSearch(q){
+  const u = `${OFF}/cgi/search.pl?search_terms=${encodeURIComponent(q)}&search_simple=1&action=process&json=1&page_size=24&lc=sk&fields=${OFF_FIELDS}`;
+  const d = await offFetch(u);
+  return (d.products||[]).map(offItem).filter(x=>x.name && x.nut);
+}
+async function offByCode(code){
+  const d = await offFetch(`${OFF}/api/v2/product/${encodeURIComponent(code)}.json?lc=sk&fields=${OFF_FIELDS}`);
+  if(!d || d.status===0 || !d.product) return null;
+  const it = offItem({...d.product, code: d.product.code || code});
+  return it.name || it.nut ? it : null;
+}
+const offErr = e => e.code==='offline' ? 'Nie si pripojený na internet.' : e.code==='busy' ? 'Open Food Facts je teraz preťažený, skús to o minútu.' : 'Open Food Facts teraz neodpovedá, skús to neskôr.';
+function applyOff(ix, it){
+  const d = S.draft, i = d && d.ingredients[ix]; if(!i || !it.nut) return;
+  i.nut = {...it.nut}; i.src = 'off'; i.offName = [it.brand, it.name].filter(Boolean).join(' · '); i.offCode = it.code;
+  if(!String(i.name).trim()) i.name = it.name;
+  if(it.serving && !n(i.pieceG)) i.pieceG = it.serving;
+  i.lookedName = i.name;
+  closeOff(); S.openNut.delete(i); renderSheet(); recalc();
+}
+
+/* panel nad editorom */
+function openOff(mode, ix){ S.off = {mode, ix, q: mode==='search' ? String(S.draft.ingredients[ix].name||'').trim() : '', results:null, busy:false, msg:'', found:null}; renderOff(); if(mode==='search' && S.off.q) offRun(); if(mode==='scan') startScan(); }
+function closeOff(){ stopScan(); S.off = null; const el=$('#offpanel'); if(el) el.remove(); }
+function offRow(it, k){
+  const nu = it.nut;
+  return `<button type="button" class="cell offres" data-offpick="${k}">
+    ${it.img ? `<img src="${esc(it.img)}" alt="" loading="lazy">` : `<span class="offph">${I.obed}</span>`}
+    <span class="grow"><span class="t">${esc(it.name)}</span><span class="sub">${esc([it.brand, it.qty].filter(Boolean).join(' · '))}</span>
+    <span class="sub num">${nu ? `100 g: ${Math.round(n(nu.kcal))} kcal · B ${fmtN(nu.p)} · S ${fmtN(nu.c)} · T ${fmtN(nu.f)}` : 'bez výživových hodnôt'}</span></span></button>`;
+}
+function renderOff(){
+  const o = S.off; if(!o) return;
+  let el = $('#offpanel');
+  if(!el){ el = document.createElement('div'); el.id='offpanel'; document.body.appendChild(el); }
+  const ing = S.draft.ingredients[o.ix];
+  const body = o.mode==='search' ? `
+      <form class="offsearch" id="offform"><label class="searchf" style="margin:0;flex:1">${I.search}<input id="offq" type="search" enterkeyhint="search" placeholder="Názov výrobku, napr. skyr Milko" value="${esc(o.q)}" autocomplete="off"></label><button class="gbtn save" type="submit" style="height:40px">Hľadať</button></form>
+      ${o.busy ? '<div class="status"><span class="spin" style="display:inline-block;vertical-align:-4px;margin-right:8px"></span>Hľadám…</div>' : ''}
+      ${o.msg ? `<p class="gfoot" style="text-align:center;padding:16px">${esc(o.msg)}</p>` : ''}
+      ${o.results && o.results.length ? `<div class="group" style="--inset:84px">${o.results.map(offRow).join('')}</div>` : ''}`
+    : `
+      ${o.found ? `<div class="group" style="--inset:84px">${offRow(o.found, 'found')}</div><p class="gfoot">Ťukni na výrobok a hodnoty sa doplnia k surovine.</p><button type="button" class="gbtn glass" data-act="offrescan" style="margin-top:12px">Skenovať znova</button>`
+      : `<div class="scanbox"><video id="offvideo" playsinline muted></video><div class="scanframe"></div></div>`}
+      ${o.msg ? `<p class="gfoot" style="text-align:center;padding:12px 16px">${esc(o.msg)}</p>` : ''}
+      <form class="offsearch" id="offcode" style="margin-top:12px"><label class="searchf" style="margin:0;flex:1"><input id="offcodein" inputmode="numeric" placeholder="alebo zadaj číslo kódu" autocomplete="off"></label><button class="gbtn glass" type="submit" style="height:40px">Nájsť</button></form>`;
+  el.innerHTML = `<div class="backdrop" style="z-index:50" data-act="offclose"></div>
+    <div class="sheet offsheet" role="dialog" aria-modal="true" aria-label="Open Food Facts" style="z-index:51">
+      <div class="sheet-head"><div class="l"><button class="gbtn glass" data-act="offclose">Zavrieť</button></div><h2>${o.mode==='search'?'Hľadať výrobok':'Skenovať kód'}</h2><div class="r"></div></div>
+      <div class="sheet-body">
+        <p class="gfoot" style="padding:0 4px 12px">Pre surovinu <b>${esc(ing.name || 'bez názvu')}</b>. Hodnoty sa doplnia na 100 g a môžeš ich neskôr upraviť.</p>
+        ${body}
+        <p class="gfoot" style="padding-top:18px">Údaje o výrobkoch: Open Food Facts (licencia ODbL). Zadávajú ich používatelia, pred uložením si ich porovnaj s obalom.</p>
+      </div></div>`;
+  if(o.mode==='scan' && !o.found){ const v=$('#offvideo'); if(v && S.scanStream){ v.srcObject = S.scanStream; v.play().catch(()=>{}); } }
+}
+async function offRun(){
+  const o = S.off; if(!o || !o.q.trim() || o.busy) return;
+  o.busy = true; o.msg = ''; renderOff();
+  try{ o.results = await offSearch(o.q.trim()); if(!o.results.length) o.msg = 'Nič sa nenašlo. Skús iný názov, značku alebo naskenuj čiarový kód.'; }
+  catch(e){ o.results = null; o.msg = offErr(e); }
+  if(S.off===o){ o.busy = false; renderOff(); }
+}
+async function offLookupCode(code){
+  const o = S.off; if(!o) return;
+  code = String(code).replace(/\D/g,''); if(code.length < 6){ o.msg = 'Zadaj celé číslo pod čiarovým kódom.'; renderOff(); return; }
+  stopScan(); o.msg = 'Hľadám výrobok ' + code + '…'; renderOff();
+  try{
+    const it = await offByCode(code);
+    if(S.off!==o) return;
+    if(!it){ o.msg = `Výrobok s kódom ${code} v Open Food Facts nie je. Skús ho nájsť podľa názvu alebo zadaj hodnoty z obalu ručne.`; o.found = null; }
+    else if(!it.nut){ o.msg = `Výrobok „${it.name}“ sa našiel, ale nemá zadané výživové hodnoty. Zadaj ich z obalu ručne.`; o.found = null; }
+    else { o.found = it; o.results = [it]; o.msg = ''; }
+  }catch(e){ if(S.off===o) o.msg = offErr(e); }
+  if(S.off===o) renderOff();
+}
+
+/* skener: natívny BarcodeDetector, inak knižnica ZXing (zxing.min.js) */
+let zxingLoading = null;
+function loadZXing(){ if(window.ZXing) return Promise.resolve(); return zxingLoading || (zxingLoading = new Promise((ok,bad)=>{ const s=document.createElement('script'); s.src='zxing.min.js'; s.onload=ok; s.onerror=()=>{ zxingLoading=null; bad(); }; document.head.appendChild(s); })); }
+async function startScan(){
+  const o = S.off; if(!o) return;
+  if(!navigator.mediaDevices?.getUserMedia){ o.msg = 'Toto zariadenie nepovoľuje kameru v prehliadači. Zadaj číslo kódu ručne.'; renderOff(); return; }
+  try{
+    S.scanStream = await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'}, width:{ideal:1280}, height:{ideal:720}}, audio:false});
+  }catch(e){ o.msg = 'Bez povolenia kamery sa kód nedá naskenovať. Povoľ kameru pre túto stránku alebo zadaj číslo kódu ručne.'; renderOff(); return; }
+  if(S.off!==o){ stopScan(); return; }
+  renderOff();
+  const video = $('#offvideo'); if(!video) return;
+  const done = code => { if(S.off===o && !o.found) offLookupCode(code); };
+  if('BarcodeDetector' in window){
+    try{
+      const det = new BarcodeDetector({formats:['ean_13','ean_8','upc_a','upc_e']});
+      const tick = async () => {
+        if(!S.scanStream || S.off!==o) return;
+        try{ const r = await det.detect(video); if(r.length){ done(r[0].rawValue); return; } }catch(e){}
+        S.scanTimer = setTimeout(tick, 250);
+      };
+      tick(); return;
+    }catch(e){ /* nepodporované formáty – použijeme ZXing */ }
+  }
+  try{ await loadZXing(); }catch(e){ o.msg = 'Čítačku kódov sa nepodarilo načítať. Zadaj číslo kódu ručne.'; renderOff(); return; }
+  if(S.off!==o || !S.scanStream) return;
+  const hints = new Map(); hints.set(ZXing.DecodeHintType.POSSIBLE_FORMATS, [ZXing.BarcodeFormat.EAN_13, ZXing.BarcodeFormat.EAN_8, ZXing.BarcodeFormat.UPC_A, ZXing.BarcodeFormat.UPC_E]);
+  const reader = new ZXing.MultiFormatReader(); reader.setHints(hints);
+  S.scanReader = reader;
+  const canvas = document.createElement('canvas'), ctx = canvas.getContext('2d', {willReadFrequently:true});
+  const tick = () => {
+    if(!S.scanStream || S.off!==o) return;
+    if(video.videoWidth){
+      canvas.width = video.videoWidth; canvas.height = video.videoHeight; ctx.drawImage(video, 0, 0);
+      try{ const bmp = new ZXing.BinaryBitmap(new ZXing.HybridBinarizer(new ZXing.HTMLCanvasElementLuminanceSource(canvas))); const res = reader.decode(bmp); if(res){ done(res.getText()); return; } }catch(e){}
+    }
+    S.scanTimer = setTimeout(tick, 250);
+  };
+  tick();
+}
+function stopScan(){
+  clearTimeout(S.scanTimer);
+  if(S.scanStream){ S.scanStream.getTracks().forEach(t=>t.stop()); S.scanStream = null; }
+  S.scanReader = null;
+}
+
 /* ---------- editor sheet ---------- */
 const blankIng = () => ({name:'',amount:'',unit:'g',measureQty:'',measure:''});
 function newCats(){
@@ -1076,7 +1238,7 @@ function openSheet(d){ S.draft=d; S.err=''; S.conflict=null; S.openNut=new Set()
   d.ingredients.forEach(i=>{ if(String(i.name).trim() && !hasNut(i)){ const h=lookupLocal(i.name); if(h) applyHit(i,h); } });
   document.body.classList.add('locked'); renderSheet(false); renderTabbar(null);
   if(d._snap===undefined) d._snap = JSON.stringify({...d, _snap:undefined, _base:undefined}); }
-function closeSheet(){ S.draft=null; clearStash(); document.body.classList.remove('locked'); $('#sheet').innerHTML=''; render(); }
+function closeSheet(){ closeOff(); S.draft=null; clearStash(); document.body.classList.remove('locked'); $('#sheet').innerHTML=''; render(); }
 
 function renderSheet(keep=true){
   const body = $('.sheet-body'); const top = keep && body ? body.scrollTop : 0;
@@ -1133,6 +1295,7 @@ function renderSheet(keep=true){
           <div class="cell"><span class="lbl grow sub">≈ Kuchynsky</span><input class="in right num" style="width:48px;flex:none" id="i-mq-${ix}" data-i="${ix}" data-k="measureQty" inputmode="decimal" value="${esc(shown(i.measureQty))}" placeholder="0">
             <select class="sel" id="i-m-${ix}" data-i="${ix}" data-k="measure" aria-label="Kuchynská miera">${MEASURES.map(m=>`<option value="${esc(m)}" ${i.measure===m?'selected':''}>${m?shortM(m):'miera'}</option>`).join('')}</select></div>
           ${nutCell(i, ix)}
+          <div class="cell offrow"><button type="button" class="offbtn" data-offsearch="${ix}">${I.search}<span>Hľadať výrobok</span></button><button type="button" class="offbtn" data-offscan="${ix}">${I.barcode}<span>Skenovať kód</span></button></div>
         </div>`).join('')}
         <div class="group"><button type="button" class="cell addc" data-act="addi"><span class="plus">${I.plus}</span>Pridať surovinu</button></div>
         <p class="gfoot">Kuchynská miera sa pri zmene porcií prepočíta spolu s gramážou. Pol lyžice zapíš ako 0,5.</p>
@@ -1169,6 +1332,11 @@ window.addEventListener('scroll', onScroll, {passive:true});
 document.addEventListener('click', async e=>{
   const t = e.target.closest('button,[data-act]'); if(!t) return;
   const d = S.draft;
+  if(t.dataset.act==='offclose'){ closeOff(); return; }
+  if(t.dataset.act==='offrescan'){ S.off.found=null; S.off.msg=''; renderOff(); startScan(); return; }
+  if(t.dataset.offpick!==undefined && S.off){ const it = t.dataset.offpick==='found' ? S.off.found : S.off.results[+t.dataset.offpick]; if(it && it.nut) applyOff(S.off.ix, it); return; }
+  if(t.dataset.offsearch!==undefined){ openOff('search', +t.dataset.offsearch); return; }
+  if(t.dataset.offscan!==undefined){ openOff('scan', +t.dataset.offscan); return; }
   if(t.dataset.go){ go(t.dataset.go); return; }
   if(t.dataset.themeSet){ setTheme(t.dataset.themeSet); return; }
   if(t.dataset.tpage!==undefined){ go('types', t.dataset.tpage); return; }
@@ -1256,7 +1424,11 @@ document.addEventListener('change', async e=>{
     }catch(err){ st.textContent='Fotku sa nepodarilo nahrať'+(err&&err.code?` (${err.code})`:'')+'. Skús menší obrázok alebo JPG.'; }
   }
 });
-document.addEventListener('keydown', e=>{ if(e.key==='Escape' && S.draft) $('#cancelbtn')?.click(); });
+document.addEventListener('keydown', e=>{ if(e.key!=='Escape') return; if(S.off) closeOff(); else if(S.draft) $('#cancelbtn')?.click(); });
+document.addEventListener('submit', e=>{
+  if(e.target.id==='offform'){ e.preventDefault(); S.off.q = $('#offq').value; offRun(); }
+  if(e.target.id==='offcode'){ e.preventDefault(); offLookupCode($('#offcodein').value); }
+}, true);
 
 async function save(opt={}){
   const d=S.draft;
