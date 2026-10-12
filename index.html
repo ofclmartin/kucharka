@@ -185,7 +185,6 @@ button.cell:active,.cell.tap:active{background:var(--fill)}
 .tab{display:grid;justify-items:center;gap:1px;padding:6px 8px;border-radius:999px;font-size:10px;font-weight:600;color:var(--label);min-width:52px}
 .tab svg{width:23px;height:23px}
 .tab[aria-pressed="true"]{color:var(--cc);background:var(--fill)}
-@media (max-width:440px){ .tab{min-width:0;padding:6px 5px;font-size:9.5px} .tab svg{width:21px;height:21px} .tabbar{gap:0;padding:4px} }
 
 /* sheet */
 .backdrop{position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:40;animation:fadein .25s ease}
@@ -284,6 +283,21 @@ textarea.in{resize:none;line-height:1.4;overflow:hidden;display:block}
   .cats .catb{font-size:11px}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+
+/* navigácia B */
+.mealchips{display:flex;gap:8px;overflow-x:auto;margin:-8px -20px 20px;padding:2px 20px;scrollbar-width:none}
+.mealchips::-webkit-scrollbar{display:none}
+.mchip{flex:none;display:inline-flex;align-items:center;gap:7px;height:36px;padding:0 14px;border-radius:999px;background:var(--card);font-size:15px;font-weight:600;color:var(--label);border:1px solid var(--sep)}
+.mchip i{width:9px;height:9px;border-radius:50%;background:var(--cc)}
+.mchip[aria-pressed="true"]{background:var(--label);color:var(--bg);border-color:var(--label)}
+.tabbar{left:16px;transform:none;max-width:calc(100% - 100px)}
+.tabbar .tab{min-width:78px;font-size:11px;padding:6px 12px}
+.fab{position:fixed;right:16px;bottom:calc(env(safe-area-inset-bottom,0px) + 14px);z-index:30;width:60px;height:60px;border-radius:50%;display:grid;place-items:center;color:var(--tint)}
+.fab svg{width:28px;height:28px}
+@media (min-width:700px){ .tabbar{left:50%;transform:translateX(-50%)} }
+.avatar{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;font-weight:700;font-size:18px;color:#fff;background:linear-gradient(145deg,#5E5CE6,#AF52DE);box-shadow:var(--glass-sh);flex:none}
+.avatar.big{width:48px;height:48px;font-size:20px;box-shadow:none}
+@media (max-width:700px){ .setsheet{top:calc(env(safe-area-inset-top,0px) + 56px)} }
 
 /* Na vyskúšanie + AI */
 .shots{display:grid;grid-template-columns:repeat(auto-fill,minmax(92px,1fr));gap:10px}
@@ -386,6 +400,10 @@ const I = {
   link:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M10 14a4.5 4.5 0 0 0 6.4 0l3-3a4.5 4.5 0 0 0-6.4-6.4l-1.2 1.2M14 10a4.5 4.5 0 0 0-6.4 0l-3 3a4.5 4.5 0 0 0 6.4 6.4l1.2-1.2"/></svg>',
   sparkle:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M11 2.5c.4 3.9 2.6 6.1 6.5 6.5-3.9.4-6.1 2.6-6.5 6.5-.4-3.9-2.6-6.1-6.5-6.5 3.9-.4 6.1-2.6 6.5-6.5zM18.5 13c.2 2 1.3 3.1 3.3 3.3-2 .2-3.1 1.3-3.3 3.3-.2-2-1.3-3.1-3.3-3.3 2-.2 3.1-1.3 3.3-3.3z"/></svg>',
   bookmark:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M6 3.5h12v17l-6-4-6 4z"/></svg>',
+  book:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M5 4.5A1.5 1.5 0 0 1 6.5 3H19v15H6.5A1.5 1.5 0 0 0 5 19.5zM5 19.5A1.5 1.5 0 0 0 6.5 21H19v-3"/><path d="M9 7.5h6"/></svg>',
+  trash:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></svg>',
+  down:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>',
+  up:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 15V4M7 9l5-5 5 5M5 20h14"/></svg>',
   camera:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>',
 };
 const CATS = [
@@ -624,7 +642,7 @@ function commit(){ S.dirty = true; splitAll(); cacheSave(); render(); push(); }
 function cacheSave(){ LS.set('cache', {store:S.store, all:S.all, purged:S.purged, dirty:S.dirty, settings:S.settings}); }
 
 /* stav synchronizácie */
-function setSync(state, msg=''){ S.sync = state; S.syncMsg = msg; const el = $('#syncline'); if(el) el.outerHTML = syncLine(); }
+function setSync(state, msg=''){ S.sync = state; S.syncMsg = msg; const el = $('#syncline'); if(el) el.outerHTML = syncLine(); if(S.setOpen) renderSettings(); }
 function syncLine(){
   const map = {
     saving: ['', 'Ukladám na Google Drive…'],
@@ -754,7 +772,7 @@ async function importBackup(file){
     commit();
     S.importMsg = `Nahrané: ${added} nových${updated?`, ${updated} aktualizovaných`:''} receptov.`;
   }catch(e){ S.importMsg = 'Súbor sa nepodarilo načítať. Vyber zálohu vo formáte JSON z Fit Kuchárky.'; }
-  render();
+  render(); renderSettings();
 }
 /* rozpísaný recept v tomto zariadení (poistka pri zatvorení okna) */
 const DRAFT_KEY='kucharka-draft';
@@ -773,20 +791,57 @@ function render(){
   const detail = S.view==='detail' && r, trash = S.view==='trash', types = S.view==='types', tryv = S.view==='try';
   const title = detail ? r.name : trash ? 'Kôš' : tryv ? 'Na vyskúšanie' : types ? (S.tpage || 'Druhy jedál') : (S.cat==='all' ? 'Kuchárka' : cat(S.cat).name);
   const bar = `<div class="topbar" id="topbar">
-    <div class="l">${types && S.tpage ? `<button class="gbtn glass" data-go="types" aria-label="Späť">${I.back}<span>Druhy</span></button>` : detail && S.back==='try' ? `<button class="gbtn glass" data-go="try" aria-label="Späť">${I.back}<span>Na vyskúšanie</span></button>` : detail && S.back==='types' ? `<button class="gbtn glass" data-tpage="${esc(S.backT||'')}" aria-label="Späť">${I.back}<span>${esc(S.backT||'Druhy')}</span></button>` : detail||trash||tryv ? `<button class="gbtn glass" data-go="home" aria-label="Späť">${I.back}<span>Recepty</span></button>` : themeBtn()}</div>
+    <div class="l">${types && S.tpage ? `<button class="gbtn glass" data-go="types" aria-label="Späť">${I.back}<span>Druhy</span></button>` : detail && S.back==='try' ? `<button class="gbtn glass" data-go="try" aria-label="Späť">${I.back}<span>Na vyskúšanie</span></button>` : detail && S.back==='types' ? `<button class="gbtn glass" data-tpage="${esc(S.backT||'')}" aria-label="Späť">${I.back}<span>${esc(S.backT||'Druhy')}</span></button>` : detail||trash ? `<button class="gbtn glass" data-go="home" aria-label="Späť">${I.back}<span>Recepty</span></button>` : avatarBtn()}</div>
     <div class="mid">${esc(title)}</div>
-    <div class="r">${trash ? '' : tryv ? `<button class="gbtn glass round tint" data-act="wishnew" aria-label="Uložiť odkaz">${I.plus}</button>` : detail ? `<button class="gbtn glass tint" data-act="edit">Upraviť</button>` : `<button class="gbtn glass round tint" data-act="new" aria-label="Nový recept">${I.plus}</button>`}</div>
+    <div class="r">${detail ? `<button class="gbtn glass tint" data-act="edit">Upraviť</button>` : ''}</div>
   </div>`;
   $('#app').innerHTML = bar + syncLine() + (S.status?`<div class="status">${esc(S.status)}</div>`:'') + (detail ? viewDetail(r) : trash ? viewTrash() : tryv ? viewTry() : types ? viewTypes() : viewHome());
-  renderTabbar(detail||trash||tryv ? null : types ? 'types' : S.cat);
+  renderTabbar(detail||trash ? null : tryv ? 'try' : types ? 'types' : 'home');
   onScroll();
 }
 function renderTabbar(active){
   let tb = $('#tabbar');
-  if(!tb){ tb = document.createElement('nav'); tb.id='tabbar'; tb.className='tabbar glass'; tb.setAttribute('aria-label','Kapitoly'); document.body.appendChild(tb); }
+  if(!tb){ tb = document.createElement('nav'); tb.id='tabbar'; tb.className='tabbar glass'; tb.setAttribute('aria-label','Navigácia'); document.body.appendChild(tb); }
+  let fab = $('#fab');
+  if(!fab){ fab = document.createElement('button'); fab.id='fab'; fab.className='fab glass'; document.body.appendChild(fab); }
   tb.hidden = !!S.draft;
-  tb.innerHTML = [{id:'all',name:'Všetko'},...CATS].map(c=>`<button class="tab" data-cat="${c.id}" style="${cc(c.id)}" aria-pressed="${active===c.id}">${I[c.id]}<span>${c.name}</span></button>`).join('')
-    + `<button class="tab" data-go="types" style="--cc:var(--tint)" aria-pressed="${active==='types'}">${I.tag}<span>Druhy</span></button>`;
+  const tab = (id, icon, label, go) => `<button class="tab" data-go="${go}" style="--cc:var(--tint)" aria-pressed="${active===id}">${icon}<span>${label}</span></button>`;
+  tb.innerHTML = tab('home', I.book, 'Recepty', 'home') + tab('try', I.bookmark, 'Vyskúšať', 'try') + tab('types', I.tag, 'Druhy', 'types');
+  const showFab = !S.draft && (active==='home' || active==='try' || active==='types');
+  fab.hidden = !showFab;
+  fab.dataset.act = active==='try' ? 'wishnew' : 'new';
+  fab.setAttribute('aria-label', active==='try' ? 'Uložiť odkaz na recept' : 'Nový recept');
+  fab.innerHTML = I.plus;
+}
+function avatarBtn(){
+  const ch = (S.me || '?').trim().charAt(0).toUpperCase() || '?';
+  return `<button class="avatar" data-act="settings" aria-label="Nastavenia">${esc(ch)}</button>`;
+}
+
+/* ---------- nastavenia ---------- */
+function openSettings(){ S.setOpen = true; document.body.classList.add('locked'); renderSettings(); }
+function closeSettings(){ S.setOpen = false; $('#setpanel')?.remove(); if(!S.draft) document.body.classList.remove('locked'); }
+function renderSettings(){
+  if(!S.setOpen) return;
+  let el = $('#setpanel'); if(!el){ el = document.createElement('div'); el.id = 'setpanel'; document.body.appendChild(el); }
+  const st = S.sync==='ok' ? 'všetko uložené' : S.sync==='saving' ? 'ukladám…' : S.sync==='offline' ? 'offline, čaká na uloženie' : S.sync==='auth' ? 'treba sa znova prihlásiť' : 'čaká na uloženie';
+  el.innerHTML = `<div class="backdrop" style="z-index:40" data-act="setclose"></div>
+  <div class="sheet setsheet" role="dialog" aria-modal="true" aria-label="Nastavenia" style="z-index:41">
+    <div class="sheet-head"><div class="l"></div><h2>Nastavenia</h2><div class="r"><button class="gbtn glass" data-act="setclose">Hotovo</button></div></div>
+    <div class="sheet-body">
+      <div class="block"><div class="group"><div class="cell"><span class="avatar big">${esc((S.me||'?').charAt(0).toUpperCase())}</span><span class="grow"><b>${esc(S.me||'Neprihlásený')}</b><span class="sub" style="display:block;font-size:13px">${esc(LS.get('email')||'')}</span></span></div></div></div>
+      <div class="block"><div class="gtitle">Vzhľad</div><div class="group"><div class="cell"><div class="seg full" role="group" aria-label="Vzhľad">${THEMES.map(([k,l])=>`<button type="button" data-theme-set="${k}" aria-pressed="${S.theme===k}">${k==='auto'?'Auto':l}</button>`).join('')}</div></div></div></div>
+      <div class="block"><div class="gtitle">Údaje</div><div class="group" style="--inset:58px">
+        <div class="cell"><span class="ico" style="--cc:#34A853">${I.cloud}</span><span class="grow">Google Drive<span class="sub" style="display:block;font-size:13px">priečinok ${esc(S.store?.folderName||CONFIG.FOLDER_NAME)}${S.store?.shared?' (zdieľaný)':''} · ${st}</span></span><button class="linkbtn" data-act="sync">Synchronizovať</button></div>
+        <button class="cell" data-act="aikey"><span class="ico" style="--cc:#AF52DE">${I.sparkle}</span><span class="grow">AI pomocník (Google Gemini)<span class="sub" style="display:block;font-size:13px">${geminiKey()?'kľúč je nastavený':'kľúč nie je nastavený'}</span></span>${I.chev}</button>
+        <button class="cell" data-act="settrash"><span class="ico" style="--cc:#8E8E93">${I.trash}</span><span class="grow">Kôš</span><span class="sub num">${S.trash.length}</span>${I.chev}</button>
+        <button class="cell" data-act="backup"><span class="ico" style="--cc:#007AFF">${I.down}</span><span class="grow">Stiahnuť zálohu receptov</span><span class="sub">JSON</span></button>
+        <label class="cell" for="f-import" style="cursor:pointer"><span class="ico" style="--cc:#007AFF">${I.up}</span><span class="grow">Nahrať recepty zo zálohy</span><span class="sub">JSON</span></label>
+      </div>${S.importMsg?`<p class="gfoot" style="color:var(--label)">${esc(S.importMsg)}</p>`:''}
+      <p class="gfoot">Recepty sa po každej zmene uložia do súboru ${esc(CONFIG.FILE_NAME)} na Google Drive. Vymazané recepty sa najprv presunú do koša. Údaje o výrobkoch: Open Food Facts (ODbL).</p>
+      <input id="f-import" type="file" accept="application/json,.json" hidden></div>
+      <div class="block"><div class="group"><button class="cell danger" data-act="signout">Odhlásiť sa</button></div></div>
+    </div></div>`;
 }
 
 function viewHome(){
@@ -794,8 +849,9 @@ function viewHome(){
   const match = r => (!q || (r.name+' '+rtypes(r).join(' ')+' '+(r.ingredients||[]).map(i=>i.name).join(' ')).toLowerCase().includes(q))
     && (!S.type || (S.type===FAST ? (totalMin(r)>0 && totalMin(r)<=15) : rtypes(r).includes(S.type)));
   const today = new Date().toLocaleDateString('sk-SK',{weekday:'long', day:'numeric', month:'long'});
-  let out = `<header class="large"><div class="date">${esc(today)}</div><h1>${S.cat==='all'?'Kuchárka':cat(S.cat).name}</h1></header>
-    <label class="searchf">${I.search}<input id="search" type="search" placeholder="Recept alebo surovina" value="${esc(S.q)}" autocomplete="off"></label>`;
+  let out = `<header class="large"><div class="date">${esc(today)}</div><h1>Kuchárka</h1></header>
+    <label class="searchf">${I.search}<input id="search" type="search" placeholder="Recept alebo surovina" value="${esc(S.q)}" autocomplete="off"></label>
+    <div class="mealchips" role="group" aria-label="Kapitola"><button class="mchip" data-cat="all" aria-pressed="${S.cat==='all'}">Všetko</button>${CATS.map(c=>`<button class="mchip" data-cat="${c.id}" style="${cc(c.id)}" aria-pressed="${S.cat===c.id}"><i></i>${c.name}</button>`).join('')}</div>`;
 
   const st = !S.draft && readStash();
   if(st && (String(st.name||'').trim() || (st.ingredients||[]).some(i=>String(i.name||'').trim()))) out += `<div class="block"><div class="group">
@@ -814,7 +870,7 @@ function viewHome(){
     </div>${S.importMsg?`<p class="gfoot" style="color:var(--label)">${esc(S.importMsg)}</p>`:''}<p class="gfoot">Recepty sa po každej zmene uložia do súboru ${esc(CONFIG.FILE_NAME)} na Google Drive. Vymazané recepty sa najprv presunú do koša. Údaje o výrobkoch: Open Food Facts (ODbL).</p>
     <input id="f-import" type="file" accept="application/json,.json" hidden></div>`;
   if(!S.recipes.length){
-    return out + `<div class="empty"><h3>${S.status?'Načítavam…':'Zatiaľ žiadne recepty'}</h3><p>Ťukni na <b>+</b> vpravo hore a pridaj prvý recept, alebo nahraj recepty zo zálohy nižšie.</p></div>` + (S.status?'':foot());
+    return out + `<div class="empty"><h3>${S.status?'Načítavam…':'Zatiaľ žiadne recepty'}</h3><p>Ťukni na <b>+</b> vpravo dole a pridaj prvý recept. Recepty zo zálohy nahráš v Nastaveniach (ikona vľavo hore).</p></div>`;
   }
   const list = S.recipes.filter(match).sort((a,b)=> SORTS[S.sort].fn(a,b) || (a.name||'').localeCompare(b.name||'','sk'));
   out += `<div class="sortbar"><span class="lbl">Zoradiť</span>${sortPill()}</div>`;
@@ -827,10 +883,6 @@ function viewHome(){
   </div>`;
 
   if(S.cat==='all' && !q && !S.type){
-    out += `<div class="block"><div class="gtitle">Obsah</div><div class="group" style="--inset:58px">
-      ${CATS.map(c=>{ const k=list.filter(r=>rcats(r).includes(c.id)).length;
-        return `<button class="cell" data-cat="${c.id}" style="${cc(c.id)}"><span class="ico">${I[c.id]}</span><span class="grow">${c.name}</span><span class="sub num">${k}</span>${I.chev}</button>`; }).join('')}
-    </div></div>`;
     for(const c of CATS){
       const items = list.filter(r=>rcats(r).includes(c.id)); if(!items.length) continue;
       out += `<section class="block" style="${cc(c.id)}"><div class="sechead"><h2>${c.name}</h2><button data-cat="${c.id}">Všetky</button></div>
@@ -838,11 +890,11 @@ function viewHome(){
     }
     const anytime = list.filter(r=>!rcats(r).length);
     if(anytime.length) out += `<section class="block"><div class="sechead"><h2>Kedykoľvek</h2></div>${rows(anytime, null)}</section>`;
-    return out + foot();
+    return out;
   }
   const items = list.filter(r=> S.cat==='all' || rcats(r).includes(S.cat));
   if(!items.length) return out + `<div class="empty"><h3>${q||S.type?'Nič sa nenašlo':'Táto kapitola je prázdna'}</h3><p>${q||S.type?'Skús iný výraz alebo iný druh jedla.':'Pridaj recept cez + vpravo hore.'}</p></div>`;
-  return out + rows(items, S.cat!=='all'?S.cat:null) + foot();
+  return out + rows(items, S.cat!=='all'?S.cat:null);
 }
 function rows(items, catId){ return `<div class="group rows">${items.map((r,ix)=>row(r,ix,catId)).join('')}</div>`; }
 function row(r, ix, catId){
@@ -1630,13 +1682,16 @@ window.addEventListener('scroll', onScroll, {passive:true});
 document.addEventListener('click', async e=>{
   const t = e.target.closest('button,[data-act]'); if(!t) return;
   const d = S.draft;
+  if(t.dataset.act==='settings'){ openSettings(); return; }
+  if(t.dataset.act==='setclose'){ closeSettings(); return; }
+  if(t.dataset.act==='settrash'){ closeSettings(); go('trash'); return; }
   if(t.dataset.act==='aiclose'){ closeAi(); return; }
   if(t.dataset.act==='airun'){ runAi(); return; }
   if(t.dataset.act==='aikeyshow'){ const tx=$('#ai-text'); if(tx) S.aip.text=tx.value; S.aip.keyMode=true; renderAi(); return; }
   if(t.dataset.act==='aikeysave'){ const v=$('#ai-key').value.trim(); if(!/^\S{20,}$/.test(v)){ alertIn('#aipanel', 'Vlož celý kľúč, začína sa zvyčajne na „AIza“.'); return; } saveKey(v); S.aip.keyMode=false; if(!S.draft){ closeAi(); render(); return; } renderAi(); return; }
   if(t.dataset.act==='aikeydel'){ saveKey(''); S.aip.keyMode=true; renderAi(); render(); return; }
   if(t.dataset.aishotrm!==undefined){ S.aip.shots.splice(+t.dataset.aishotrm,1); const tx=$('#ai-text'); if(tx) S.aip.text=tx.value; renderAi(); return; }
-  if(t.dataset.act==='aikey'){ openAi({}); S.aip.keyMode=true; renderAi(); return; }
+  if(t.dataset.act==='aikey'){ closeSettings(); openAi({}); S.aip.keyMode=true; renderAi(); return; }
   if(t.dataset.act==='wishclose'){ closeWish(); return; }
   if(t.dataset.act==='wishsave'){ if(await saveWish()){ closeWish(); if(S.view!=='try') go('try'); } return; }
   if(t.dataset.act==='wishpaste'){ try{ const v = await navigator.clipboard.readText(); if(v){ $('#w-url').value = v.trim(); readWishFields(); } }catch(e){ readWishFields(); S.wp.msg='Prehliadač nedovolil čítať schránku. Podrž prst v poli a zvoľ Vložiť.'; renderWish(); } return; }
@@ -1754,7 +1809,7 @@ document.addEventListener('change', async e=>{
     }catch(err){ st.textContent='Fotku sa nepodarilo nahrať'+(err&&err.code?` (${err.code})`:'')+'. Skús menší obrázok alebo JPG.'; }
   }
 });
-document.addEventListener('keydown', e=>{ if(e.key!=='Escape') return; if(S.aip) closeAi(); else if(S.wp) closeWish(); else if(S.off) closeOff(); else if(S.draft) $('#cancelbtn')?.click(); });
+document.addEventListener('keydown', e=>{ if(e.key!=='Escape') return; if(S.setOpen) closeSettings(); else if(S.aip) closeAi(); else if(S.wp) closeWish(); else if(S.off) closeOff(); else if(S.draft) $('#cancelbtn')?.click(); });
 document.addEventListener('submit', e=>{
   if(e.target.id==='offform'){ e.preventDefault(); S.off.q = $('#offq').value; offRun(); }
   if(e.target.id==='offcode'){ e.preventDefault(); offLookupCode($('#offcodein').value); }
@@ -1798,7 +1853,7 @@ function applyTheme(){
   else el.setAttribute('data-theme', S.theme);
   const m = document.querySelector('meta[name="theme-color"]'); if(m) m.content = effectiveDark() ? '#000000' : '#F2F2F7';
 }
-function setTheme(t){ S.theme=t; try{ localStorage.setItem('kucharka-theme',t); }catch(e){} applyTheme(); render(); }
+function setTheme(t){ S.theme=t; try{ localStorage.setItem('kucharka-theme',t); }catch(e){} applyTheme(); render(); renderSettings(); }
 function themeBtn(){
   const opt = (k, inner, label) => `<button type="button" data-theme-set="${k}" aria-pressed="${S.theme===k}" aria-label="${label}" title="${label}">${inner}</button>`;
   return `<div class="themeseg glass" role="group" aria-label="Vzhľad">${opt('auto','Auto','Automaticky podľa systému')}${opt('light',I.sun,'Svetlý režim')}${opt('dark',I.moon,'Tmavý režim')}</div>`;
