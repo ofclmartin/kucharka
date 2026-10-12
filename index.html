@@ -809,8 +809,8 @@ function renderTabbar(active){
   tb.innerHTML = tab('home', I.book, 'Recepty', 'home') + tab('try', I.bookmark, 'Vyskúšať', 'try') + tab('types', I.tag, 'Druhy', 'types');
   const showFab = !S.draft && (active==='home' || active==='try' || active==='types');
   fab.hidden = !showFab;
-  fab.dataset.act = active==='try' ? 'wishnew' : 'new';
-  fab.setAttribute('aria-label', active==='try' ? 'Uložiť odkaz na recept' : 'Nový recept');
+  fab.dataset.act = 'new';
+  fab.setAttribute('aria-label', 'Nový recept');
   fab.innerHTML = I.plus;
 }
 function avatarBtn(){
@@ -1362,8 +1362,8 @@ function viewTry(){
 }
 
 /* --- panel uloženého odkazu --- */
-function openWish(item){
-  S.wp = { item: JSON.parse(JSON.stringify(item || { id:newId('w'), kind:'wish', url:'', name:'', note:'', shots:[] })), isNew: !item, msg:'' };
+function openWish(item, prefill){
+  S.wp = { item: JSON.parse(JSON.stringify(item || { id:newId('w'), kind:'wish', url:'', name:'', note:'', shots:[], ...(prefill||{}) })), isNew: !item, msg:'' };
   document.body.classList.add('locked'); renderWish();
 }
 function closeWish(){ S.wp = null; $('#wishpanel')?.remove(); if(!S.draft) document.body.classList.remove('locked'); }
@@ -1605,6 +1605,7 @@ function renderSheet(keep=true){
       ${S.conflict?`<div class="err" style="display:grid;gap:10px"><span>${esc(S.conflict)}</span>
         <span style="display:flex;gap:8px;flex-wrap:wrap"><button type="button" class="gbtn glass" data-act="savecopy" style="height:38px;font-size:15px">Uložiť ako nový recept</button><button type="button" class="gbtn glass" data-act="force" style="height:38px;font-size:15px;color:var(--red)">Prepísať ich zmeny</button></span></div>`:''}
 
+      ${isNew && !d.fromWish ? `<div class="seg full" role="group" aria-label="Čo pridávaš" style="margin-bottom:18px;grid-template-columns:1fr 1fr"><button type="button" aria-pressed="true">Recept</button><button type="button" data-act="tolink" aria-pressed="false">Len odkaz</button></div>` : ''}
       <div class="block">
         <label class="photo-tile" for="f-photo">${photoBox(d)}<span class="gbtn glass">${I.camera}<span>${hasPhoto(d)?'Zmeniť fotku':'Pridať fotku'}</span></span></label>
         <input id="f-photo" type="file" accept="image/*" hidden>
@@ -1754,6 +1755,7 @@ document.addEventListener('click', async e=>{
     case 'edit': { const r=getR(S.id); openSheet(JSON.parse(JSON.stringify({...blank(), ...r, categories:rcats(r), types:rtypes(r), _base:r.updatedAt||'', autoNutri: r.autoNutri ?? false, nutrition:{...blank().nutrition, ...(r.nutrition||{})}}))); break; }
     case 'trytoggle': d.trying = !d.trying; t.setAttribute('aria-checked', d.trying); stashDraft(); break;
     case 'aiopen': openAi({}); break;
+    case 'tolink': { const pre = { name: String(d.name||'').trim(), url: String(d.source||'').trim(), note: String(d.intro||'').trim() }; S.draft=null; clearStash(); closeOff(); closeAi(); $('#sheet').innerHTML=''; openWish(null, pre); render(); break; }
     case 'cancel': {
       const cb=$('#cancelbtn');
       if(isDirty(d) && cb && !cb.classList.contains('armed')){ cb.classList.add('armed'); cb.textContent='Zahodiť zmeny?'; cb.style.color='var(--red)'; setTimeout(()=>{ if(cb.isConnected){ cb.classList.remove('armed'); cb.textContent='Zrušiť'; cb.style.color=''; } }, 3500); break; }
