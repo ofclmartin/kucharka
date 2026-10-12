@@ -62,7 +62,7 @@ h1,h2,h3{margin:0;text-wrap:balance}
 .topbar .mid{font-weight:600;font-size:17px;opacity:0;transition:opacity .2s;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:52vw}
 .topbar.scrolled .mid{opacity:1}
 .topbar .l{justify-self:start}.topbar .r{justify-self:end;display:flex;gap:8px}
-.gbtn{height:44px;min-width:44px;border-radius:999px;display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:0 14px;font-weight:600;color:var(--label)}
+.gbtn{white-space:nowrap;height:44px;min-width:44px;border-radius:999px;display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:0 14px;font-weight:600;color:var(--label)}
 .gbtn.round{padding:0;width:44px}
 .gbtn svg{width:22px;height:22px}
 .gbtn.tint{color:var(--tint)}
@@ -285,6 +285,26 @@ textarea.in{resize:none;line-height:1.4;overflow:hidden;display:block}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 
+/* Na vyskúšanie + AI */
+.shots{display:grid;grid-template-columns:repeat(auto-fill,minmax(92px,1fr));gap:10px}
+.shotwrap{position:relative}
+.shotwrap .ph,.shotadd{aspect-ratio:3/4;border-radius:14px;width:100%}
+.shotwrap .minus{position:absolute;top:-6px;right:-6px;box-shadow:0 2px 6px rgba(0,0,0,.25)}
+.shotadd{display:grid;place-content:center;justify-items:center;gap:4px;background:var(--card);border:1.5px dashed var(--sep);color:var(--tint);font-size:13px;font-weight:600;cursor:pointer}
+.shotadd svg{width:24px;height:24px}
+.ph.shot .fb{background:var(--fill);color:var(--label3)}
+.ph.shot .fb svg{width:40%}
+.aibtn{display:grid;grid-template-columns:auto 1fr;grid-template-rows:auto auto;column-gap:12px;align-items:center;width:100%;text-align:left;padding:14px 16px;margin-bottom:24px;border-radius:var(--rl);color:#fff;background:linear-gradient(120deg,#7B5CF5,#C24DD8 55%,#FF5E7E)}
+.aibtn svg{width:26px;height:26px;grid-row:1/3}
+.aibtn span{font-weight:700;font-size:17px}
+.aibtn small{font-size:13px;opacity:.85}
+.trybanner{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;background:color-mix(in srgb,#FF2D55 12%,var(--card));border-radius:16px;padding:10px 12px 10px 14px;margin-bottom:14px;font-size:14px}
+.trybanner span{display:inline-flex;align-items:center;gap:6px}
+.trybanner svg{width:16px;height:16px;color:#FF2D55}
+.srclink{display:inline-flex;align-items:center;gap:6px;color:var(--tint);text-decoration:none;font-size:15px}
+.srclink svg{width:16px;height:16px}
+a.cell{color:inherit;text-decoration:none}
+
 /* Open Food Facts */
 .offrow{gap:8px;flex-wrap:wrap;padding-block:10px}
 .offbtn{display:inline-flex;align-items:center;gap:6px;height:34px;padding:0 12px;border-radius:999px;background:var(--fill);color:var(--tint);font-size:14px;font-weight:600}
@@ -363,6 +383,9 @@ const I = {
   cloud:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M7 18h10.5a4 4 0 0 0 .4-8 6 6 0 0 0-11.6 1.5A3.3 3.3 0 0 0 7 18z"/></svg>',
   google:'<svg viewBox="0 0 24 24"><path fill="#fff" d="M21.6 12.2c0-.7-.1-1.4-.2-2H12v3.8h5.4a4.6 4.6 0 0 1-2 3v2.5h3.2c1.9-1.7 3-4.3 3-7.3z"/><path fill="#fff" opacity=".85" d="M12 22c2.7 0 5-.9 6.6-2.4l-3.2-2.5c-.9.6-2 1-3.4 1-2.6 0-4.8-1.8-5.6-4.1H3.1v2.6A10 10 0 0 0 12 22z"/><path fill="#fff" opacity=".7" d="M6.4 14a6 6 0 0 1 0-3.9V7.5H3.1a10 10 0 0 0 0 9z"/><path fill="#fff" opacity=".85" d="M12 6c1.5 0 2.8.5 3.8 1.5l2.9-2.9A10 10 0 0 0 3.1 7.5l3.3 2.6C7.2 7.8 9.4 6 12 6z"/></svg>',
   barcode:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2M7 8v8M10.5 8v8M14 8v8M17 8v8"/></svg>',
+  link:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M10 14a4.5 4.5 0 0 0 6.4 0l3-3a4.5 4.5 0 0 0-6.4-6.4l-1.2 1.2M14 10a4.5 4.5 0 0 0-6.4 0l-3 3a4.5 4.5 0 0 0 6.4 6.4l1.2-1.2"/></svg>',
+  sparkle:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M11 2.5c.4 3.9 2.6 6.1 6.5 6.5-3.9.4-6.1 2.6-6.5 6.5-.4-3.9-2.6-6.1-6.5-6.5 3.9-.4 6.1-2.6 6.5-6.5zM18.5 13c.2 2 1.3 3.1 3.3 3.3-2 .2-3.1 1.3-3.3 3.3-.2-2-1.3-3.1-3.3-3.3 2-.2 3.1-1.3 3.3-3.3z"/></svg>',
+  bookmark:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M6 3.5h12v17l-6-4-6 4z"/></svg>',
   camera:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>',
 };
 const CATS = [
@@ -384,7 +407,7 @@ const UNITS = ['g','ml','ks'];
 const MEASURES = ['', 'PL (polievková lyžica)','ČL (čajová lyžička)','odmerka','hrnček','šálka','hrsť','štipka','plátok','kus','strúčik','balenie','konzerva'];
 const DIFF = ['Ľahké','Stredné','Náročné'];
 
-const S = { off:null, scanStream:null, scanTimer:null, scanReader:null, screen:'app', store:null, purged:{}, img:{}, sync:'', syncMsg:'', me:'', dirty:false, loaded:false, found:null, authErr:'', importMsg:'', token:null, recipes:[], view:'home', id:null, cat:'all', q:'', servings:null, checked:new Set(), draft:null, db:null, assets:null, status:'Načítavam recepty…', err:'', tpage:'', all:[], trash:[], uid:null, user:null, names:{}, dl:null, conflict:null, openNut:new Set(), pending:new Set(), ai:null, aiErr:'', type:'', sort:(()=>{ try{ return localStorage.getItem('kucharka-sort')||'new'; }catch(e){ return 'new'; } })() };
+const S = { wish:[], trying:[], settings:{}, wp:null, aip:null, off:null, scanStream:null, scanTimer:null, scanReader:null, screen:'app', store:null, purged:{}, img:{}, sync:'', syncMsg:'', me:'', dirty:false, loaded:false, found:null, authErr:'', importMsg:'', token:null, recipes:[], view:'home', id:null, cat:'all', q:'', servings:null, checked:new Set(), draft:null, db:null, assets:null, status:'Načítavam recepty…', err:'', tpage:'', all:[], trash:[], uid:null, user:null, names:{}, dl:null, conflict:null, openNut:new Set(), pending:new Set(), ai:null, aiErr:'', type:'', sort:(()=>{ try{ return localStorage.getItem('kucharka-sort')||'new'; }catch(e){ return 'new'; } })() };
 const SORTS = {
   new:     {name:'Najnovšie',            fn:(a,b)=>String(b.createdAt||'').localeCompare(String(a.createdAt||''))},
   old:     {name:'Najstaršie',           fn:(a,b)=>String(a.createdAt||'').localeCompare(String(b.createdAt||''))},
@@ -530,7 +553,7 @@ async function uploadNew(parent, name, mime, blob){
   fd.append('file', blob);
   return (await api(`${UPLOAD}/files?uploadType=multipart&fields=id,version`, {method:'POST', body:fd})).json();
 }
-const payload = () => JSON.stringify({ app:'Fit Kuchárka', v:1, savedAt:new Date().toISOString(), recipes:S.all.map(r=>{ const {photoData, ...x} = r; return r.photoDrive ? x : r; }), purged:S.purged });
+const payload = () => JSON.stringify({ app:'Fit Kuchárka', v:1, savedAt:new Date().toISOString(), recipes:S.all.map(r=>{ const {photoData, ...x} = r; return r.photoDrive ? x : r; }), purged:S.purged, settings:S.settings||{} });
 async function createStore(){
   let folder = S.found?.folder;
   if(!folder) folder = await (await api(`${DRIVE}/files?fields=id,name`, {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({name:CONFIG.FOLDER_NAME, mimeType:'application/vnd.google-apps.folder'})})).json();
@@ -548,6 +571,7 @@ function mergeIn(data){
     if(!cur || stamp(r) > stamp(cur)) map.set(r.id, (cur && cur.photoData && !r.photoDrive && !r.photoData) ? {...r, photoData:cur.photoData} : r);
   }
   for(const id in purged) map.delete(id);
+  if(data.settings && String(data.settings.at||'') > String(S.settings?.at||'')) S.settings = data.settings;
   S.all = [...map.values()]; S.purged = purged; splitAll();
 }
 async function pull(force){
@@ -566,6 +590,16 @@ async function uploadPendingPhotos(){
     r.photoDrive = f.id; delete r.photoData;
     idb.put(f.id, blob); S.img[f.id] = URL.createObjectURL(blob);
     cacheSave();
+  }
+  for(const r of S.all){
+    for(const sh of (r.shots||[])){
+      if(!sh.data || sh.drive) continue;
+      const blob = dataUrlToBlob(sh.data);
+      const f = await uploadNew(S.store.folderId, `screenshot-${r.id}-${Date.now().toString(36)}.jpg`, 'image/jpeg', blob);
+      sh.drive = f.id; delete sh.data;
+      idb.put(f.id, blob); S.img[f.id] = URL.createObjectURL(blob);
+      cacheSave();
+    }
   }
 }
 let pushing = null, pushAgain = false;
@@ -587,7 +621,7 @@ async function push(){
   try{ await pushing; } finally{ pushing = null; }
 }
 function commit(){ S.dirty = true; splitAll(); cacheSave(); render(); push(); }
-function cacheSave(){ LS.set('cache', {store:S.store, all:S.all, purged:S.purged, dirty:S.dirty}); }
+function cacheSave(){ LS.set('cache', {store:S.store, all:S.all, purged:S.purged, dirty:S.dirty, settings:S.settings}); }
 
 /* stav synchronizácie */
 function setSync(state, msg=''){ S.sync = state; S.syncMsg = msg; const el = $('#syncline'); if(el) el.outerHTML = syncLine(); }
@@ -652,7 +686,7 @@ async function boot(){
   if(S.token && !(S.token.exp > Date.now())) S.token = null;
   S.me = LS.get('me') || '';
   const c = LS.get('cache');
-  if(c){ S.store = c.store || null; S.all = c.all || []; S.purged = c.purged || {}; S.dirty = !!c.dirty; S.loaded = true; splitAll(); }
+  if(c){ S.store = c.store || null; S.all = c.all || []; S.purged = c.purged || {}; S.settings = c.settings || {}; S.dirty = !!c.dirty; S.loaded = true; splitAll(); }
   if(!configured()){ S.screen = 'setup'; render(); return; }
   if(!tokenOk()){
     if(c && !S.authErr && canSilent()){ render(); return signIn(true); }
@@ -670,7 +704,7 @@ async function boot(){
   document.addEventListener('visibilitychange', refresh);
   window.addEventListener('online', ()=>{ if(S.dirty) push(); else refresh(); });
 }
-function splitAll(){ S.recipes = S.all.filter(r=>!r.deletedAt); S.trash = S.all.filter(r=>r.deletedAt).sort((a,b)=>String(b.deletedAt).localeCompare(String(a.deletedAt))); }
+function splitAll(){ const live = S.all.filter(r=>!r.deletedAt); S.recipes = live.filter(r=>r.kind!=='wish' && !r.trying); S.trying = live.filter(r=>r.kind!=='wish' && r.trying); S.wish = live.filter(r=>r.kind==='wish'); S.trash = S.all.filter(r=>r.deletedAt).sort((a,b)=>String(b.deletedAt).localeCompare(String(a.deletedAt))); }
 const who = id => (id && !/^u_[A-Za-z0-9_-]{16,}$/.test(id)) ? id : '';
 const dshort = iso => iso ? new Date(iso).toLocaleDateString('sk-SK',{day:'numeric',month:'numeric',year:'numeric'}) : '';
 function byline(r){
@@ -735,16 +769,16 @@ function go(view, id=null){ S.view=view; S.id = view==='detail' ? id : null; if(
 
 function render(){
   if(S.screen && S.screen!=='app'){ $('#app').innerHTML = viewGate(); const tb=$('#tabbar'); if(tb) tb.hidden=true; return; }
-  const r = S.id ? S.recipes.find(x=>x.id===S.id) : null;
-  const detail = S.view==='detail' && r, trash = S.view==='trash', types = S.view==='types';
-  const title = detail ? r.name : trash ? 'Kôš' : types ? (S.tpage || 'Druhy jedál') : (S.cat==='all' ? 'Kuchárka' : cat(S.cat).name);
+  const r = S.id ? getR(S.id) : null;
+  const detail = S.view==='detail' && r, trash = S.view==='trash', types = S.view==='types', tryv = S.view==='try';
+  const title = detail ? r.name : trash ? 'Kôš' : tryv ? 'Na vyskúšanie' : types ? (S.tpage || 'Druhy jedál') : (S.cat==='all' ? 'Kuchárka' : cat(S.cat).name);
   const bar = `<div class="topbar" id="topbar">
-    <div class="l">${types && S.tpage ? `<button class="gbtn glass" data-go="types" aria-label="Späť">${I.back}<span>Druhy</span></button>` : detail && S.back==='types' ? `<button class="gbtn glass" data-tpage="${esc(S.backT||'')}" aria-label="Späť">${I.back}<span>${esc(S.backT||'Druhy')}</span></button>` : detail||trash ? `<button class="gbtn glass" data-go="home" aria-label="Späť">${I.back}<span>Recepty</span></button>` : themeBtn()}</div>
+    <div class="l">${types && S.tpage ? `<button class="gbtn glass" data-go="types" aria-label="Späť">${I.back}<span>Druhy</span></button>` : detail && S.back==='try' ? `<button class="gbtn glass" data-go="try" aria-label="Späť">${I.back}<span>Na vyskúšanie</span></button>` : detail && S.back==='types' ? `<button class="gbtn glass" data-tpage="${esc(S.backT||'')}" aria-label="Späť">${I.back}<span>${esc(S.backT||'Druhy')}</span></button>` : detail||trash||tryv ? `<button class="gbtn glass" data-go="home" aria-label="Späť">${I.back}<span>Recepty</span></button>` : themeBtn()}</div>
     <div class="mid">${esc(title)}</div>
-    <div class="r">${trash ? '' : detail ? `<button class="gbtn glass tint" data-act="edit">Upraviť</button>` : `<button class="gbtn glass round tint" data-act="new" aria-label="Nový recept">${I.plus}</button>`}</div>
+    <div class="r">${trash ? '' : tryv ? `<button class="gbtn glass round tint" data-act="wishnew" aria-label="Uložiť odkaz">${I.plus}</button>` : detail ? `<button class="gbtn glass tint" data-act="edit">Upraviť</button>` : `<button class="gbtn glass round tint" data-act="new" aria-label="Nový recept">${I.plus}</button>`}</div>
   </div>`;
-  $('#app').innerHTML = bar + syncLine() + (S.status?`<div class="status">${esc(S.status)}</div>`:'') + (detail ? viewDetail(r) : trash ? viewTrash() : types ? viewTypes() : viewHome());
-  renderTabbar(detail||trash ? null : types ? 'types' : S.cat);
+  $('#app').innerHTML = bar + syncLine() + (S.status?`<div class="status">${esc(S.status)}</div>`:'') + (detail ? viewDetail(r) : trash ? viewTrash() : tryv ? viewTry() : types ? viewTypes() : viewHome());
+  renderTabbar(detail||trash||tryv ? null : types ? 'types' : S.cat);
   onScroll();
 }
 function renderTabbar(active){
@@ -768,8 +802,11 @@ function viewHome(){
       <div class="cell"><span class="grow">Máš rozpísaný neuložený recept${st.name?` <b>${esc(st.name)}</b>`:''}.</span></div>
       <button class="cell addc" data-act="resume"><span class="grow">Pokračovať v úprave</span>${I.chev}</button>
       <button class="cell danger" data-act="dropstash" style="justify-content:flex-start;font-weight:500">Zahodiť</button></div></div>`;
+  if(S.cat==='all' && !q && !S.type){ const k = S.wish.length + S.trying.length;
+    out += `<div class="block"><div class="group" style="--inset:58px"><button class="cell" data-go="try"><span class="ico" style="--cc:#FF2D55">${I.bookmark}</span><span class="grow">Na vyskúšanie<span class="sub" style="display:block;font-size:13px">${k ? 'recepty a odkazy, ktoré chcete uvariť' : 'ulož si recept z Instagramu'}</span></span><span class="sub num">${k||''}</span>${I.chev}</button></div></div>`; }
   const foot = () => `<div class="block" style="margin-top:12px"><div class="gtitle">Údaje</div><div class="group">
       <div class="cell"><span class="ico" style="--cc:#34A853">${I.cloud}</span><span class="grow">Google Drive<span class="sub" style="display:block;font-size:13px">priečinok ${esc(S.store?.folderName||CONFIG.FOLDER_NAME)}${S.store?.shared?' (zdieľaný)':''} · ${S.sync==='ok'?'všetko uložené':S.sync==='saving'?'ukladám…':'čaká na uloženie'}</span></span><button class="linkbtn" data-act="sync">Synchronizovať</button></div>
+      <button class="cell" data-act="aikey"><span class="ico" style="--cc:#AF52DE">${I.sparkle}</span><span class="grow">AI pomocník (Google Gemini)<span class="sub" style="display:block;font-size:13px">${geminiKey()?'kľúč je nastavený':'kľúč nie je nastavený'}</span></span>${I.chev}</button>
       <button class="cell" data-go="trash"><span class="grow">Kôš</span><span class="sub num">${S.trash.length}</span>${I.chev}</button>
       <button class="cell" data-act="backup"><span class="grow">Stiahnuť zálohu receptov</span><span class="sub">JSON</span></button>
       <label class="cell" for="f-import" style="cursor:pointer"><span class="grow">Nahrať recepty zo zálohy</span><span class="sub">JSON</span></label>
@@ -896,10 +933,12 @@ function viewDetail(r){
     <div class="dhead">
     <div class="hero">${photoBox(r, r.example?'<span class="pill ex glass">Ukážka</span>':'')}</div>
     <div class="dinfo">
+      ${r.trying?`<div class="trybanner"><span>${I.bookmark}<b>Na vyskúšanie</b> · zatiaľ nie je v kuchárke</span><button class="gbtn save" data-act="tried" style="height:36px;font-size:15px">Uvarili sme, presunúť do kuchárky</button></div>`:''}
       <div class="kicker">${rcats(r).length ? rcats(r).map(id=>cat(id).name).join(' · ') : 'Kedykoľvek'}</div>
       <h1>${esc(r.name)}</h1>
       ${rtypes(r).length?`<div class="dtypes">${rtypes(r).map(t=>`<button class="tchip" data-tpage="${esc(t)}">${esc(t)}</button>`).join('')}</div>`:''}
       ${r.intro?`<p class="intro">${esc(r.intro)}</p>`:''}
+      ${safeUrl(r.source)?`<p class="intro" style="margin-top:-10px"><a class="srclink" href="${esc(safeUrl(r.source))}" target="_blank" rel="noopener">${I.link}<span>Pôvodný recept · ${esc(domainOf(r.source))}</span></a></p>`:''}
       <div class="tiles num">
         <div class="tile">${I.clock}<strong>${n(r.prepMin)||'–'}<small> min</small></strong><span>Príprava</span></div>
         <div class="tile">${I.flame}<strong>${n(r.cookMin)||'–'}<small> min</small></strong><span>Varenie</span></div>
@@ -1225,6 +1264,261 @@ function stopScan(){
   S.scanReader = null;
 }
 
+/* ---------- Na vyskúšanie + AI (Google Gemini) ---------- */
+const getR = id => S.all.find(x=>x.id===id && !x.deletedAt && x.kind!=='wish');
+const getW = id => S.all.find(x=>x.id===id && !x.deletedAt && x.kind==='wish');
+const newId = p => p + Date.now().toString(36) + Math.random().toString(36).slice(2,6);
+const domainOf = u => { try{ return new URL(u).hostname.replace(/^www\./,''); }catch(e){ return ''; } };
+const safeUrl = u => /^https?:\/\//i.test(String(u||'').trim()) ? String(u).trim() : '';
+function shotBox(s, cls='shot'){
+  const src = s.drive ? (S.img[s.drive] || s.data || '') : (s.data || '');
+  if(s.drive && !S.img[s.drive]) loadPhoto(s.drive);
+  return `<div class="ph ${cls}"${s.drive?` data-ph="${esc(s.drive)}"`:''}>${src ? `<img src="${esc(src)}" alt="">` : `<div class="fb">${I.link}</div>`}</div>`;
+}
+async function shotToB64(s){
+  let blob;
+  if(s.data) blob = dataUrlToBlob(s.data);
+  else if(s.drive){ blob = await idb.get(s.drive); if(!blob){ blob = await (await api(`${DRIVE}/files/${encodeURIComponent(s.drive)}?alt=media`)).blob(); idb.put(s.drive, blob); } }
+  if(!blob) return null;
+  const url = await new Promise((ok,bad)=>{ const r=new FileReader(); r.onload=()=>ok(r.result); r.onerror=bad; r.readAsDataURL(blob); });
+  return { mime: blob.type || 'image/jpeg', b64: String(url).split(',')[1] };
+}
+
+/* --- zoznam „Na vyskúšanie“ --- */
+function viewTry(){
+  let out = `<header class="large"><div class="date">Recepty z Instagramu a odinakiaľ</div><h1>Na vyskúšanie</h1></header>
+    <div class="block"><div class="group" style="--inset:58px">
+      <button class="cell" data-act="wishnew"><span class="ico" style="--cc:#FF2D55">${I.link}</span><span class="grow">Uložiť odkaz na recept<span class="sub" style="display:block;font-size:13px">odkaz z Instagramu, poznámka a screenshoty</span></span>${I.chev}</button>
+      <button class="cell" data-act="ainew"><span class="ico" style="--cc:#AF52DE">${I.sparkle}</span><span class="grow">Vytvoriť recept z fotky alebo textu<span class="sub" style="display:block;font-size:13px">AI z popisu urobí koncept receptu</span></span>${I.chev}</button>
+    </div></div>`;
+  if(!S.wish.length && !S.trying.length) return out + `<div class="empty"><h3>Zatiaľ tu nič nie je</h3><p>Uvidíš recept na Instagrame? V Instagrame ťukni na Zdieľať → Kopírovať odkaz a ulož ho sem. Pridaj aj screenshot popisu, z neho potom vytvoríš recept.</p></div>`;
+  if(S.wish.length){
+    const list = S.wish.slice().sort((a,b)=>String(b.createdAt||'').localeCompare(String(a.createdAt||'')));
+    out += `<section class="block"><div class="sechead"><h2>Uložené odkazy</h2></div><div class="group" style="--inset:94px">${list.map(w=>`
+      <button class="cell rrow" data-wish="${esc(w.id)}" style="--cc:#FF2D55">
+        <span class="th">${(w.shots||[])[0] ? shotBox(w.shots[0]) : `<div class="ph"><div class="fb">${I.link}</div></div>`}</span>
+        <span class="grow"><span class="t">${esc(w.name || 'Recept')}</span>
+          <span class="meta"><span>${esc(domainOf(w.url) || 'bez odkazu')}</span>${(w.shots||[]).length?`<span>${w.shots.length} ${plural(w.shots.length,'screenshot','screenshoty','screenshotov')}</span>`:''}<span>${dshort(w.createdAt)}</span></span>
+          ${w.note?`<span class="meta" style="display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(w.note.slice(0,120))}</span>`:''}</span>
+        ${I.chev}</button>`).join('')}</div></section>`;
+  }
+  if(S.trying.length){
+    const list = S.trying.slice().sort((a,b)=>String(b.createdAt||'').localeCompare(String(a.createdAt||'')));
+    out += `<section class="block"><div class="sechead"><h2>Recepty na vyskúšanie</h2></div>${rows(list, null)}<p class="gfoot">Keď recept uvaríte, v detaile ho jedným ťuknutím presunieš do kuchárky.</p></section>`;
+  }
+  return out;
+}
+
+/* --- panel uloženého odkazu --- */
+function openWish(item){
+  S.wp = { item: JSON.parse(JSON.stringify(item || { id:newId('w'), kind:'wish', url:'', name:'', note:'', shots:[] })), isNew: !item, msg:'' };
+  document.body.classList.add('locked'); renderWish();
+}
+function closeWish(){ S.wp = null; $('#wishpanel')?.remove(); if(!S.draft) document.body.classList.remove('locked'); }
+function renderWish(){
+  const p = S.wp; if(!p) return;
+  const w = p.item;
+  let el = $('#wishpanel'); if(!el){ el = document.createElement('div'); el.id = 'wishpanel'; document.body.appendChild(el); }
+  const url = safeUrl(w.url);
+  el.innerHTML = `<div class="backdrop" style="z-index:45" data-act="wishclose"></div>
+  <div class="sheet" role="dialog" aria-modal="true" aria-label="Odkaz na recept" style="z-index:46;--cc:#FF2D55">
+    <div class="sheet-head"><div class="l"><button class="gbtn glass" data-act="wishclose">Zrušiť</button></div><h2>${p.isNew?'Nový odkaz':'Na vyskúšanie'}</h2><div class="r"><button class="gbtn save" data-act="wishsave">Uložiť</button></div></div>
+    <div class="sheet-body">
+      ${p.msg?`<div class="err">${esc(p.msg)}</div>`:''}
+      <div class="block"><div class="gtitle">Odkaz</div><div class="group">
+        <div class="cell"><input class="in" id="w-url" data-w="url" type="url" inputmode="url" placeholder="https://www.instagram.com/…" value="${esc(w.url)}" autocomplete="off"><button type="button" class="linkbtn" data-act="wishpaste" style="flex:none">Vložiť</button></div>
+        <label class="cell" for="w-name"><input class="in" id="w-name" data-w="name" placeholder="Názov, napr. Proteínové palacinky" value="${esc(w.name)}" autocomplete="off"></label>
+      </div><p class="gfoot">V Instagrame ťukni pod príspevkom na Zdieľať → Kopírovať odkaz a tu na Vložiť.</p></div>
+      <div class="block"><div class="gtitle">Text receptu alebo poznámka</div><div class="group">
+        <label class="cell" for="w-note"><textarea class="in" id="w-note" data-w="note" rows="3" placeholder="Sem môžeš vložiť skopírovaný popis príspevku alebo si napísať poznámku">${esc(w.note)}</textarea></label>
+      </div></div>
+      <div class="block"><div class="gtitle">Screenshoty</div>
+        <div class="shots">${(w.shots||[]).map((s,k)=>`<div class="shotwrap">${shotBox(s)}<button type="button" class="minus" data-wshotrm="${k}" aria-label="Odstrániť screenshot">${I.minus}</button></div>`).join('')}
+          <label class="shotadd" for="w-shots">${I.camera}<span>Pridať</span></label></div>
+        <input id="w-shots" type="file" accept="image/*" multiple hidden>
+        <p class="gfoot">Odfoť popis receptu pod príspevkom, aj na viac obrázkov. Z nich potom AI vytvorí recept.</p></div>
+      <div class="block"><div class="group">
+        ${url?`<a class="cell addc" href="${esc(url)}" target="_blank" rel="noopener"><span class="grow">Otvoriť ${esc(domainOf(url))}</span>${I.chev}</a>`:''}
+        <button type="button" class="cell addc" data-act="wishai"><span class="ico" style="--cc:#AF52DE">${I.sparkle}</span><span class="grow">Vytvoriť recept s AI</span>${I.chev}</button>
+        <button type="button" class="cell addc" data-act="wishmanual"><span class="grow">Prepísať recept ručne</span>${I.chev}</button>
+        ${p.isNew?'':`<button type="button" class="cell danger" data-act="wishdel">Presunúť do koša</button>`}
+      </div></div>
+    </div></div>`;
+  el.querySelectorAll('textarea').forEach(grow);
+}
+function readWishFields(){ const p=S.wp; if(!p) return; ['url','name','note'].forEach(k=>{ const e=$('#w-'+k); if(e) p.item[k]=e.value; }); }
+function wishValid(w){ return safeUrl(w.url) || String(w.note||'').trim() || (w.shots||[]).length; }
+async function saveWish(){
+  readWishFields();
+  const w = S.wp.item;
+  if(!wishValid(w)){ S.wp.msg = 'Vlož odkaz, text receptu alebo aspoň jeden screenshot.'; renderWish(); return false; }
+  w.url = String(w.url||'').trim(); w.name = String(w.name||'').trim() || (domainOf(w.url).includes('instagram') ? 'Recept z Instagramu' : 'Recept na vyskúšanie');
+  if(!w.createdAt) w.createdAt = new Date().toISOString();
+  w.updatedAt = new Date().toISOString();
+  await saveRecipe(w);
+  return true;
+}
+
+/* --- AI kľúč a volanie Gemini --- */
+const geminiKey = () => String(S.settings?.geminiKey || CONFIG.GEMINI_KEY || '').trim();
+const GEMINI_MODELS = () => [LS.get('gemini-model'), ...(CONFIG.GEMINI_MODELS || ['gemini-3.5-flash-lite','gemini-flash-lite-latest','gemini-3.1-flash-lite','gemini-2.5-flash-lite','gemini-flash-latest'])].filter((v,i,a)=>v && a.indexOf(v)===i);
+function aiPrompt(text){
+  const meas = MEASURES.filter(Boolean).map(shortM).join(', ');
+  return `Si asistent aplikácie Fit Kuchárka. Z priloženého textu a/alebo obrázkov (screenshoty príspevku z Instagramu, popis pod videom, fotka receptu) vytvor recept po slovensky.
+Vráť IBA jeden JSON objekt v tomto tvare:
+{"name": "názov", "intro": "jedna krátka veta alebo prázdne", "servings": 1, "prepMin": 10, "cookMin": 15,
+ "categories": [], "types": [],
+ "ingredients": [{"name": "ovsené vločky", "amount": 50, "unit": "g", "measureQty": 5, "measure": "PL"}],
+ "steps": ["krok 1", "krok 2"], "tips": "",
+ "nutrition": null}
+Pravidlá:
+- categories: vyber z ["ranajky","desiata","obed","olovrant","vecera"], kedy sa jedlo hodí; ak sa nedá určiť, nechaj prázdne.
+- types: vyber len z [${TYPES.map(t=>'"'+t+'"').join(', ')}].
+- ingredients: názvy po slovensky, krátko a bežne (napr. "grécky jogurt", "proteín vanilka"). unit je "g", "ml" alebo "ks". measure je jedno z: ${meas}, alebo "".
+- Ak je množstvo v lyžiciach, hrnčekoch, cups alebo kusoch, vyplň measureQty a measure a do amount daj odhad v g alebo ml. Prevody: 1 cup ≈ 240 ml, 1 tbsp ≈ 15 ml, 1 tsp ≈ 5 ml, 1 oz ≈ 28 g, 1 scoop proteínu ≈ 30 g. Vajcia, banány a podobne daj ako unit "ks".
+- Nevymýšľaj suroviny ani kroky, ktoré v zdroji nie sú. Ak niečo chýba, nechaj null alebo prázdne.
+- steps: stručné kroky postupu v poradí, preložené do slovenčiny.
+- nutrition: {"kcal": , "protein": , "carbs": , "fat": } na 1 porciu, IBA ak sú hodnoty v zdroji výslovne uvedené; inak null.
+${text ? '\nText zo zdroja:\n"""\n' + text.slice(0, 12000) + '\n"""' : ''}`;
+}
+function parseAiJson(t){
+  t = String(t||'').trim().replace(/^```(?:json)?\s*/i,'').replace(/```\s*$/,'');
+  try{ return JSON.parse(t); }catch(e){}
+  const a = t.indexOf('{'), b = t.lastIndexOf('}');
+  if(a>=0 && b>a){ try{ return JSON.parse(t.slice(a, b+1)); }catch(e){} }
+  throw {code:'parse'};
+}
+async function aiRecipe(text, shots){
+  const key = geminiKey(); if(!key) throw {code:'nokey'};
+  const images = [];
+  for(const s of (shots||[]).slice(0,6)){ const im = await shotToB64(s); if(im) images.push(im); }
+  if(!String(text||'').trim() && !images.length) throw {code:'empty'};
+  const body = JSON.stringify({ contents:[{ role:'user', parts:[{text: aiPrompt(String(text||'').trim())}, ...images.map(im=>({inline_data:{mime_type:im.mime, data:im.b64}}))] }],
+    generationConfig:{ responseMimeType:'application/json', temperature:0.2 } });
+  let lastErr = null;
+  for(const model of GEMINI_MODELS()){
+    let res;
+    try{ res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent?key=${encodeURIComponent(key)}`, {method:'POST', headers:{'Content-Type':'application/json'}, body}); }
+    catch(e){ throw {code:'offline'}; }
+    let data = null; try{ data = await res.json(); }catch(e){}
+    if(res.ok){
+      const parts = data?.candidates?.[0]?.content?.parts || [];
+      const txt = parts.filter(p=>!p.thought).map(p=>p.text||'').join('');
+      if(!txt) throw {code:'empty_answer', message: data?.promptFeedback?.blockReason || data?.candidates?.[0]?.finishReason || ''};
+      LS.set('gemini-model', model);
+      return parseAiJson(txt);
+    }
+    const msg = data?.error?.message || '';
+    if(res.status===404 || /not found|is not supported|no longer available/i.test(msg)){ lastErr = {code:'model', message:msg}; continue; }
+    if(res.status===429) throw {code:'quota', message:msg};
+    if(res.status===400 && /api key/i.test(msg)) throw {code:'badkey', message:msg};
+    if(res.status===403) throw {code:'forbidden', message:msg};
+    throw {code:'http', status:res.status, message:msg};
+  }
+  throw lastErr || {code:'model'};
+}
+const aiErrText = e => ({
+  nokey:'Najprv nastav kľúč pre Google Gemini.',
+  empty:'Vlož text receptu alebo pridaj aspoň jeden screenshot.',
+  offline:'Nie si pripojený na internet.',
+  quota:'Bezplatný limit Gemini je na chvíľu vyčerpaný. Skús to o minútu, prípadne zajtra.',
+  badkey:'Kľúč pre Gemini nie je platný. Skontroluj ho v Údajoch → AI pomocník.',
+  forbidden:'Google kľúč odmietol. Skontroluj, či má kľúč povolenú adresu ofclmartin.github.io a Generative Language API.',
+  parse:'AI vrátila odpoveď v zlom tvare. Skús to znova.',
+  model:'Model Gemini nie je dostupný. Skús to neskôr alebo mi daj vedieť.',
+  empty_answer:'AI nevrátila žiadny recept. Skús lepší screenshot alebo vlož text.',
+}[e && e.code] || ('AI sa nepodarilo použiť' + (e && e.message ? ': ' + e.message : '.')));
+
+function fillDraftFromAi(d, o){
+  const num = v => { const x = n(v); return x > 0 ? r1(x) : ''; };
+  if(o.name) d.name = String(o.name).trim();
+  if(o.intro) d.intro = String(o.intro).trim();
+  if(num(o.servings)) d.servings = Math.max(1, Math.round(n(o.servings)));
+  if(num(o.prepMin)) d.prepMin = Math.round(n(o.prepMin));
+  if(num(o.cookMin)) d.cookMin = Math.round(n(o.cookMin));
+  const cats = (o.categories||[]).map(String).filter(c=>CATS.some(x=>x.id===c));
+  if(cats.length) d.categories = CATS.map(c=>c.id).filter(id=>cats.includes(id)), d.category = d.categories[0];
+  const types = (o.types||[]).map(String).filter(t=>TYPES.includes(t));
+  if(types.length) d.types = [...new Set([...rtypes(d), ...types])];
+  const ings = (o.ingredients||[]).filter(i=>i && String(i.name||'').trim()).map(i=>{
+    const unit = ['g','ml','ks'].includes(String(i.unit)) ? String(i.unit) : 'g';
+    const ms = String(i.measure||'').trim().toLowerCase();
+    const measure = ms ? (MEASURES.find(m=>m && (shortM(m).toLowerCase()===ms || m.toLowerCase().startsWith(ms))) || '') : '';
+    return { ...blankIng(), name:String(i.name).trim(), amount:num(i.amount), unit, measureQty: measure ? num(i.measureQty) : '', measure };
+  });
+  if(ings.length) d.ingredients = ings;
+  const steps = (o.steps||[]).map(s=>String(s).trim()).filter(Boolean);
+  if(steps.length) d.steps = steps;
+  if(o.tips) d.tips = String(o.tips).trim();
+  const nu = o.nutrition;
+  if(nu && n(nu.kcal)){ d.nutrition = {...d.nutrition, kcal:Math.round(n(nu.kcal)), protein:num(nu.protein), carbs:num(nu.carbs), fat:num(nu.fat)}; d.autoNutri = false; }
+  else d.autoNutri = true;
+  d.ingredients.forEach(i=>{ const h = lookupLocal(i.name); if(h) applyHit(i, h); });
+  d.aiFilled = true;
+}
+
+/* --- AI panel (nad editorom receptu) --- */
+function openAi(opts={}){
+  S.aip = { text: opts.text || '', shots: (opts.shots||[]).map(s=>({...s})), busy:false, msg:'', keyMode: !geminiKey(), auto: !!opts.auto };
+  renderAi();
+  if(opts.auto && geminiKey() && (S.aip.text.trim() || S.aip.shots.length)) runAi();
+}
+function closeAi(){ S.aip = null; $('#aipanel')?.remove(); }
+function keyForm(){
+  return `<div class="block"><div class="gtitle">Kľúč pre Google Gemini</div><div class="group">
+      <label class="cell" for="ai-key"><input class="in" id="ai-key" type="password" autocomplete="off" placeholder="AIza…" value="${esc(geminiKey())}"></label></div>
+    <p class="gfoot">Kľúč získaš zadarmo na <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">aistudio.google.com/apikey</a> (prihlás sa rovnakým Google účtom). Uloží sa do súboru kuchárky na tvojom Google Drive, takže ho druhý človek nemusí zadávať. Do verejného kódu na GitHube sa nedostane.</p>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px"><button type="button" class="gbtn save" data-act="aikeysave">Uložiť kľúč</button>${geminiKey()?'<button type="button" class="gbtn glass" data-act="aikeydel" style="color:var(--red)">Odstrániť kľúč</button>':''}</div></div>`;
+}
+function renderAi(){
+  const a = S.aip; if(!a) return;
+  let el = $('#aipanel'); if(!el){ el = document.createElement('div'); el.id = 'aipanel'; document.body.appendChild(el); }
+  const body = a.keyMode ? keyForm() : `
+    <p class="gfoot" style="padding:0 4px 14px">Vlož skopírovaný popis receptu alebo pridaj screenshoty. AI z nich vyplní názov, suroviny s gramážou a postup. Výsledok je koncept, pred uložením ho skontroluj.</p>
+    <div class="block"><div class="gtitle">Text receptu</div><div class="group">
+      <label class="cell" for="ai-text"><textarea class="in" id="ai-text" rows="4" placeholder="Sem vlož popis z Instagramu…">${esc(a.text)}</textarea></label></div></div>
+    <div class="block"><div class="gtitle">Screenshoty</div>
+      <div class="shots">${a.shots.map((s,k)=>`<div class="shotwrap">${shotBox(s)}<button type="button" class="minus" data-aishotrm="${k}" aria-label="Odstrániť">${I.minus}</button></div>`).join('')}
+        <label class="shotadd" for="ai-shots">${I.camera}<span>Pridať</span></label></div>
+      <input id="ai-shots" type="file" accept="image/*" multiple hidden></div>
+    ${a.msg?`<div class="err">${esc(a.msg)}</div>`:''}
+    <button type="button" class="gbtn save gate-btn" data-act="airun" style="width:100%;justify-content:center" ${a.busy?'disabled':''}>${a.busy?'<span class="spin" style="border-top-color:#fff"></span><span>Čítam recept…</span>':`${I.sparkle}<span>Vytvoriť recept</span>`}</button>
+    ${a.busy?'<p class="gfoot" style="text-align:center">Zvyčajne to trvá 5 až 30 sekúnd.</p>':''}
+    <p class="gfoot" style="padding-top:18px">Používa Google Gemini (bezplatná úroveň). Text a obrázky sa pošlú Googlu na spracovanie. <button type="button" class="linkbtn" data-act="aikeyshow" style="font-size:13px;padding:0">Nastavenie kľúča</button></p>`;
+  el.innerHTML = `<div class="backdrop" style="z-index:50" data-act="aiclose"></div>
+    <div class="sheet offsheet" role="dialog" aria-modal="true" aria-label="Vyplniť pomocou AI" style="z-index:51">
+      <div class="sheet-head"><div class="l"><button class="gbtn glass" data-act="aiclose">Zavrieť</button></div><h2>${a.keyMode?'AI pomocník':'Vyplniť pomocou AI'}</h2><div class="r"></div></div>
+      <div class="sheet-body">${body}</div></div>`;
+  el.querySelectorAll('textarea').forEach(grow);
+}
+async function runAi(){
+  const a = S.aip; if(!a || a.busy) return;
+  const t = $('#ai-text'); if(t) a.text = t.value;
+  a.busy = true; a.msg = ''; renderAi();
+  try{
+    const o = await aiRecipe(a.text, a.shots);
+    if(S.aip!==a || !S.draft) return;
+    fillDraftFromAi(S.draft, o);
+    closeAi(); renderSheet(false); stashDraft();
+  }catch(e){
+    if(S.aip!==a) return;
+    a.busy = false; a.msg = aiErrText(e); if(e.code==='nokey' || e.code==='badkey') a.keyMode = true; renderAi();
+  }
+}
+function alertIn(sel, msg){ const box=$(sel+' .sheet-body'); if(!box) return; let e=box.querySelector('.err'); if(!e){ e=document.createElement('div'); e.className='err'; box.prepend(e); } e.textContent=msg; }
+function saveKey(val){
+  S.settings = {...(S.settings||{}), geminiKey: String(val||'').trim(), at: new Date().toISOString()};
+  S.dirty = true; cacheSave(); push();
+}
+/* recept z uloženého odkazu */
+function draftFromWish(w){
+  const d = blank();
+  d.trying = true; d.source = safeUrl(w.url) ? w.url : ''; d.fromWish = w.id;
+  if(w.name && !/^Recept (z Instagramu|na vyskúšanie)$/.test(w.name)) d.name = w.name;
+  d.categories = []; d.category = '';
+  return d;
+}
+
 /* ---------- editor sheet ---------- */
 const blankIng = () => ({name:'',amount:'',unit:'g',measureQty:'',measure:''});
 function newCats(){
@@ -1232,17 +1526,17 @@ function newCats(){
   const c = S.cat!=='all' ? S.cat : 'ranajky'; return {category:c, categories:[c], types:[]};
 }
 function blank(){ return {id:'r'+Date.now().toString(36)+Math.random().toString(36).slice(2,6), name:'', ...newCats(), intro:'', prepMin:'', cookMin:'', servings:1, difficulty:'Ľahké',
-  ingredients:[blankIng()], steps:[''], nutrition:{kcal:'',protein:'',carbs:'',fat:'',fiber:'',sugar:''}, tips:'', photoDrive:null, photoData:null, autoNutri:true}; }
+  ingredients:[blankIng()], steps:[''], nutrition:{kcal:'',protein:'',carbs:'',fat:'',fiber:'',sugar:''}, tips:'', photoDrive:null, photoData:null, autoNutri:true, trying: S.view==='try', source:''}; }
 
 function openSheet(d){ S.draft=d; S.err=''; S.conflict=null; S.openNut=new Set(); S.pending=new Set(); S.aiErr='';
   d.ingredients.forEach(i=>{ if(String(i.name).trim() && !hasNut(i)){ const h=lookupLocal(i.name); if(h) applyHit(i,h); } });
   document.body.classList.add('locked'); renderSheet(false); renderTabbar(null);
   if(d._snap===undefined) d._snap = JSON.stringify({...d, _snap:undefined, _base:undefined}); }
-function closeSheet(){ closeOff(); S.draft=null; clearStash(); document.body.classList.remove('locked'); $('#sheet').innerHTML=''; render(); }
+function closeSheet(){ closeOff(); closeAi(); S.draft=null; clearStash(); document.body.classList.remove('locked'); $('#sheet').innerHTML=''; render(); }
 
 function renderSheet(keep=true){
   const body = $('.sheet-body'); const top = keep && body ? body.scrollTop : 0;
-  const d=S.draft, nu=d.nutrition, isNew=!S.recipes.some(r=>r.id===d.id);
+  const d=S.draft, nu=d.nutrition, isNew=!getR(d.id);
   const calc = Math.round(n(nu.protein)*4+n(nu.carbs)*4+n(nu.fat)*9);
   const stepper = (key, step, unit) => `<div class="stepper num"><button type="button" data-inc="${key}" data-d="-${step}" aria-label="Menej">−</button><input class="in val" id="f-${key}" data-f="${key}" inputmode="numeric" value="${esc(d[key])}" placeholder="0" style="width:52px;text-align:center;padding:0;font-size:16px;font-weight:600"><button type="button" data-inc="${key}" data-d="${step}" aria-label="Viac">+</button></div>${unit?`<span class="unit" style="width:28px">${unit}</span>`:''}`;
   const nrow = (key,label,unit) => `<label class="cell" for="n-${key}"><span class="lbl grow">${label}</span><input class="in right narrow num" id="n-${key}" data-n="${key}" inputmode="decimal" value="${esc(shown(nu[key]))}" placeholder="${key==='kcal'&&calc?calc:'0'}"><span class="unit" style="width:30px">${unit}</span></label>`;
@@ -1265,9 +1559,13 @@ function renderSheet(keep=true){
         <p class="gfoot" id="photo-status">${hasPhoto(d)?'<button type="button" class="linkbtn" data-act="rmphoto" style="padding:0;color:var(--red)">Odstrániť fotku</button>':'Fotka sa zmenší a po uložení receptu sa nahrá na Google Drive.'}</p>
       </div>
 
+      <button type="button" class="aibtn" data-act="aiopen">${I.sparkle}<span>${d.aiFilled?'Vyplniť znova pomocou AI':'Vyplniť pomocou AI'}</span><small>z textu alebo screenshotu</small></button>
+      ${d.aiFilled?'<p class="gfoot" style="margin:-14px 0 18px;color:var(--label)">Recept vyplnila AI. Skontroluj hlavne gramáž, jednotky a postup.</p>':''}
       <div class="block"><div class="gtitle">Recept</div><div class="group">
         <label class="cell" for="f-name"><input class="in" id="f-name" data-f="name" value="${esc(d.name)}" placeholder="Názov receptu" autocomplete="off" enterkeyhint="next" style="font-weight:600"></label>
         <label class="cell" for="f-intro"><textarea class="in" id="f-intro" data-f="intro" rows="1" placeholder="Krátky popis (nepovinné)">${esc(d.intro)}</textarea></label>
+        <label class="cell" for="f-source"><input class="in" id="f-source" data-f="source" type="url" inputmode="url" value="${esc(d.source||'')}" placeholder="Odkaz na pôvodný recept (nepovinné)" autocomplete="off"></label>
+        <div class="cell"><span class="grow">Na vyskúšanie<span class="sub" style="display:block;font-size:13px">zatiaľ mimo kuchárky, kým ho neuvaríte</span></span><button type="button" class="switch" id="trysw" role="switch" aria-checked="${!!d.trying}" data-act="trytoggle" aria-label="Na vyskúšanie"><i></i></button></div>
       </div></div>
 
       <div class="block"><div class="gtitle">Kedy sa hodí</div>
@@ -1332,6 +1630,30 @@ window.addEventListener('scroll', onScroll, {passive:true});
 document.addEventListener('click', async e=>{
   const t = e.target.closest('button,[data-act]'); if(!t) return;
   const d = S.draft;
+  if(t.dataset.act==='aiclose'){ closeAi(); return; }
+  if(t.dataset.act==='airun'){ runAi(); return; }
+  if(t.dataset.act==='aikeyshow'){ const tx=$('#ai-text'); if(tx) S.aip.text=tx.value; S.aip.keyMode=true; renderAi(); return; }
+  if(t.dataset.act==='aikeysave'){ const v=$('#ai-key').value.trim(); if(!/^\S{20,}$/.test(v)){ alertIn('#aipanel', 'Vlož celý kľúč, začína sa zvyčajne na „AIza“.'); return; } saveKey(v); S.aip.keyMode=false; if(!S.draft){ closeAi(); render(); return; } renderAi(); return; }
+  if(t.dataset.act==='aikeydel'){ saveKey(''); S.aip.keyMode=true; renderAi(); render(); return; }
+  if(t.dataset.aishotrm!==undefined){ S.aip.shots.splice(+t.dataset.aishotrm,1); const tx=$('#ai-text'); if(tx) S.aip.text=tx.value; renderAi(); return; }
+  if(t.dataset.act==='aikey'){ openAi({}); S.aip.keyMode=true; renderAi(); return; }
+  if(t.dataset.act==='wishclose'){ closeWish(); return; }
+  if(t.dataset.act==='wishsave'){ if(await saveWish()){ closeWish(); if(S.view!=='try') go('try'); } return; }
+  if(t.dataset.act==='wishpaste'){ try{ const v = await navigator.clipboard.readText(); if(v){ $('#w-url').value = v.trim(); readWishFields(); } }catch(e){ readWishFields(); S.wp.msg='Prehliadač nedovolil čítať schránku. Podrž prst v poli a zvoľ Vložiť.'; renderWish(); } return; }
+  if(t.dataset.wshotrm!==undefined){ readWishFields(); S.wp.item.shots.splice(+t.dataset.wshotrm,1); renderWish(); return; }
+  if(t.dataset.act==='wishdel'){ const w=getW(S.wp.item.id); closeWish(); if(w){ await trashRecipe(w); } return; }
+  if(t.dataset.act==='wishai' || t.dataset.act==='wishmanual'){
+    readWishFields(); const w = S.wp.item;
+    if(!wishValid(w)){ S.wp.msg='Vlož odkaz, text receptu alebo aspoň jeden screenshot.'; renderWish(); return; }
+    if(S.wp.isNew || JSON.stringify(getW(w.id)) !== JSON.stringify(w)){ if(!(await saveWish())) return; }
+    const saved = getW(w.id) || w; closeWish();
+    openSheet(draftFromWish(saved));
+    if(t.dataset.act==='wishai') openAi({text: saved.note || '', shots: saved.shots || [], auto: true});
+    return; }
+  if(t.dataset.wish){ const w=getW(t.dataset.wish); if(w) openWish(w); return; }
+  if(t.dataset.act==='wishnew'){ openWish(null); return; }
+  if(t.dataset.act==='ainew'){ const d=blank(); d.trying=true; d.categories=[]; d.category=''; openSheet(d); openAi({}); return; }
+  if(t.dataset.act==='tried'){ const r=getR(S.id); if(r){ Object.assign(r, {trying:false, changedAt:new Date().toISOString(), updatedAt:new Date().toISOString(), updatedBy:S.me||r.updatedBy}); S.back='home'; commit(); } return; }
   if(t.dataset.act==='offclose'){ closeOff(); return; }
   if(t.dataset.act==='offrescan'){ S.off.found=null; S.off.msg=''; renderOff(); startScan(); return; }
   if(t.dataset.offpick!==undefined && S.off){ const it = t.dataset.offpick==='found' ? S.off.found : S.off.results[+t.dataset.offpick]; if(it && it.nut) applyOff(S.off.ix, it); return; }
@@ -1340,9 +1662,9 @@ document.addEventListener('click', async e=>{
   if(t.dataset.go){ go(t.dataset.go); return; }
   if(t.dataset.themeSet){ setTheme(t.dataset.themeSet); return; }
   if(t.dataset.tpage!==undefined){ go('types', t.dataset.tpage); return; }
-  if(t.dataset.open){ if(S.view!=='detail'){ S.back = S.view==='types' ? 'types' : 'home'; S.backT = S.tpage; } go('detail', t.dataset.open); return; }
+  if(t.dataset.open){ if(S.view!=='detail'){ S.back = S.view==='types' ? 'types' : S.view==='try' ? 'try' : 'home'; S.backT = S.tpage; } go('detail', t.dataset.open); return; }
   if(t.dataset.cat){ S.cat=t.dataset.cat; S.q=''; go('home'); return; }
-  if(t.dataset.sv){ const r=S.recipes.find(x=>x.id===S.id); const base=n(r.servings)||1; S.servings=Math.max(1,(S.servings??base)+ +t.dataset.sv); render(); return; }
+  if(t.dataset.sv){ const r=getR(S.id); const base=n(r.servings)||1; S.servings=Math.max(1,(S.servings??base)+ +t.dataset.sv); render(); return; }
   if(t.dataset.check){ const i=+t.dataset.check; S.checked.has(i)?S.checked.delete(i):S.checked.add(i); t.classList.toggle('done'); t.setAttribute('aria-pressed', S.checked.has(i)); return; }
   if(t.dataset.type!==undefined && !t.dataset.settype){ S.type = (S.type===t.dataset.type && t.dataset.type) ? '' : t.dataset.type; if(t.dataset.gohome) { S.cat='all'; go('home'); } else render(); return; }
   if(t.dataset.restore){ const r=S.trash.find(x=>x.id===t.dataset.restore); t.disabled=true; try{ await restoreRecipe(r); }catch(err){ t.disabled=false; t.textContent='Nepodarilo sa'; } return; }
@@ -1374,7 +1696,9 @@ document.addEventListener('click', async e=>{
     case 'resume': { const st=readStash(); if(st) openSheet(st); break; }
     case 'dropstash': clearStash(); render(); break;
     case 'backup': backup(); break;
-    case 'edit': { const r=S.recipes.find(x=>x.id===S.id); openSheet(JSON.parse(JSON.stringify({...blank(), ...r, categories:rcats(r), types:rtypes(r), _base:r.updatedAt||'', autoNutri: r.autoNutri ?? false, nutrition:{...blank().nutrition, ...(r.nutrition||{})}}))); break; }
+    case 'edit': { const r=getR(S.id); openSheet(JSON.parse(JSON.stringify({...blank(), ...r, categories:rcats(r), types:rtypes(r), _base:r.updatedAt||'', autoNutri: r.autoNutri ?? false, nutrition:{...blank().nutrition, ...(r.nutrition||{})}}))); break; }
+    case 'trytoggle': d.trying = !d.trying; t.setAttribute('aria-checked', d.trying); stashDraft(); break;
+    case 'aiopen': openAi({}); break;
     case 'cancel': {
       const cb=$('#cancelbtn');
       if(isDirty(d) && cb && !cb.classList.contains('armed')){ cb.classList.add('armed'); cb.textContent='Zahodiť zmeny?'; cb.style.color='var(--red)'; setTimeout(()=>{ if(cb.isConnected){ cb.classList.remove('armed'); cb.textContent='Zrušiť'; cb.style.color=''; } }, 3500); break; }
@@ -1390,7 +1714,7 @@ document.addEventListener('click', async e=>{
     case 'rmphoto': d.photoDrive=null; d.photoData=null; renderSheet(); break;
     case 'save': await save(); break;
     case 'del': {
-      const r=S.recipes.find(x=>x.id===d.id);
+      const r=getR(d.id);
       try{ await trashRecipe(r); clearStash(); S.draft=null; document.body.classList.remove('locked'); $('#sheet').innerHTML=''; go('home'); }catch(err){ t.textContent='Vymazanie zlyhalo'; }
       break; }
   }
@@ -1411,6 +1735,12 @@ document.addEventListener('input', e=>{
 });
 document.addEventListener('change', async e=>{
   const t=e.target, d=S.draft;
+  if((t.id==='w-shots' || t.id==='ai-shots') && t.files.length){
+    const files=[...t.files].slice(0,6); t.value='';
+    const shots=[]; for(const f of files){ try{ shots.push({id:newId('s'), data: await resizeImage(f, 1600, .82)}); }catch(e){} }
+    if(t.id==='w-shots' && S.wp){ readWishFields(); S.wp.item.shots = [...(S.wp.item.shots||[]), ...shots].slice(0,8); renderWish(); }
+    if(t.id==='ai-shots' && S.aip){ const tx=$('#ai-text'); if(tx) S.aip.text=tx.value; S.aip.shots = [...S.aip.shots, ...shots].slice(0,6); renderAi(); }
+    return; }
   if(t.id==='f-import' && t.files[0]){ importBackup(t.files[0]); t.value=''; return; }
   if(t.id==='sort'){ S.sort=t.value; try{ localStorage.setItem('kucharka-sort',S.sort); }catch(err){} render(); return; }
   if(!d) return;
@@ -1424,7 +1754,7 @@ document.addEventListener('change', async e=>{
     }catch(err){ st.textContent='Fotku sa nepodarilo nahrať'+(err&&err.code?` (${err.code})`:'')+'. Skús menší obrázok alebo JPG.'; }
   }
 });
-document.addEventListener('keydown', e=>{ if(e.key!=='Escape') return; if(S.off) closeOff(); else if(S.draft) $('#cancelbtn')?.click(); });
+document.addEventListener('keydown', e=>{ if(e.key!=='Escape') return; if(S.aip) closeAi(); else if(S.wp) closeWish(); else if(S.off) closeOff(); else if(S.draft) $('#cancelbtn')?.click(); });
 document.addEventListener('submit', e=>{
   if(e.target.id==='offform'){ e.preventDefault(); S.off.q = $('#offq').value; offRun(); }
   if(e.target.id==='offcode'){ e.preventDefault(); offLookupCode($('#offcodein').value); }
@@ -1441,6 +1771,7 @@ async function save(opt={}){
       : `Recept medzitým o ${at} zmenil(a) ${by || 'niekto iný'}. Uložením prepíšeš tieto zmeny.`;
     renderSheet(false); return;
   }
+  if(d.fromWish && !opt.copy){ const w = getW(d.fromWish); if(w){ S.all = S.all.filter(x=>x.id!==w.id); S.purged[w.id] = new Date().toISOString(); } }
   if(opt.copy){ d.id='r'+Date.now().toString(36)+Math.random().toString(36).slice(2,6); d.name=(d.name||'').trim()+' (kópia)'; d.createdAt=''; d.createdBy=''; d._base=undefined; }
   if(!d.name.trim()){ S.err='Doplň názov receptu.'; renderSheet(false); $('#f-name').focus(); return; }
   const nu={}; for(const [k,v] of Object.entries(d.nutrition)) nu[k] = String(v).trim()==='' ? '' : n(v);
@@ -1449,9 +1780,10 @@ async function save(opt={}){
   const r = {...d, name:d.name.trim(), servings:Math.max(1,n(d.servings)||1), prepMin:n(d.prepMin)||'', cookMin:n(d.cookMin)||'',
     ingredients:d.ingredients.filter(i=>String(i.name).trim()).map(i=>({...i, name:String(i.name).trim(), amount:n(i.amount)||'', measureQty:n(i.measureQty)||'', pieceG:n(i.pieceG)||'', dens:n(i.dens)||'',
       nut: hasNut(i) ? Object.fromEntries(['kcal','p','c','f','fib'].map(k=>[k, r1(n(i.nut[k]))])) : null, src:i.src||'', lookedName:i.lookedName||''})),
-    steps:d.steps.map(s=>String(s).trim()).filter(Boolean), nutrition:nu, categories:rcats(d), category:rcats(d)[0]||'', types:TYPES.filter(t=>rtypes(d).includes(t)).concat(rtypes(d).filter(t=>!TYPES.includes(t))), example:false, updatedAt:now, createdAt:d.createdAt||now};
+    steps:d.steps.map(s=>String(s).trim()).filter(Boolean), nutrition:nu, categories:rcats(d), category:rcats(d)[0]||'', types:TYPES.filter(t=>rtypes(d).includes(t)).concat(rtypes(d).filter(t=>!TYPES.includes(t))), example:false, trying:!!d.trying, source:String(d.source||'').trim(), updatedAt:now, createdAt:d.createdAt||now};
+  delete r.fromWish; delete r.aiFilled;
   const b=$('#savebtn'); b.disabled=true; b.textContent='Ukladám…';
-  try{ await saveRecipe(r); clearStash(); S.conflict=null; S.draft=null; document.body.classList.remove('locked'); $('#sheet').innerHTML=''; go('detail', r.id); }
+  try{ await saveRecipe(r); clearStash(); S.conflict=null; S.draft=null; document.body.classList.remove('locked'); $('#sheet').innerHTML=''; if(S.view!=='detail'){ S.back = S.view==='try' ? 'try' : S.view==='types' ? 'types' : 'home'; S.backT = S.tpage; } go('detail', r.id); }
   catch(err){ S.err='Uloženie zlyhalo'+(err&&err.code?` (${err.code})`:'')+'. Skús to znova.'; renderSheet(false); }
 }
 
